@@ -23,13 +23,15 @@ class GameManager
 
     checkSpawnNewGame: (users, games) ->
         # @todo do some clever stuff on users Vs games, for now just spawn
-        # add new game to redis
-        # add new game to games:active
-        # @io.broadcast "new game, come and get it!"
         data =
             created: new Date
             started: null
             finished: null
+            minPlayers: 1
+            maxPlayers: 8
+            width: 10
+            height: 10
+
 
         mapper = new GameMapper
         mapper.create data, (game) =>
