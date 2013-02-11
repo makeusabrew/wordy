@@ -2,11 +2,11 @@ function GameController($scope, $routeParams, client, d3) {
 
     $scope.game = null;
     $scope.players = [];
+    $scope.messages = [];
 
-    client.on("game:status", function(data) {
-        $scope.game = data.game;
-    });
-
+    /**
+     * init code
+     */
     client.emit("game:join", $routeParams.id);
 
     var width = 500;
@@ -40,6 +40,9 @@ function GameController($scope, $routeParams, client, d3) {
 
     var blocks = width/blockSize;
 
+    /**
+     * handlers
+     */
     client.on("game:word:spawn", function(data) {
         data.forEach(function(word) {
             var x = word.x * blockSize;
@@ -64,5 +67,17 @@ function GameController($scope, $routeParams, client, d3) {
 
             block.transition().attr("opacity", "1");
         });
+    });
+
+    client.on("game:status", function(data) {
+        $scope.game = data.game;
+    });
+
+    client.on("game:user:join", function(data) {
+        $scope.users.push(data);
+    });
+
+    client.on("game:message", function(message) {
+        $scope.messages.push(message);
     });
 }
