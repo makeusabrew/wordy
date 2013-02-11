@@ -1,41 +1,47 @@
-EventBus   = require "../lib/event_bus"
 GameMapper = require "../mappers/game"
 UserMapper = require "../mappers/user"
 
-class GameManager
-    constructor: (@io) ->
+GameRunner = require "../models/game_runner"
 
-    onAddActiveUser: ->
-        # we could of course alternatively just set up a loop to
-        # periodically check the number of users instead
+games = {}
+
+GameManager =
+    io: null
+
+    checkSpawnNewGame: (callback) ->
         users = new UserMapper
         games = new GameMapper
 
         users.countAllActive (numUsers) =>
             games.countAllActive (numGames) =>
-                @checkSpawnNewGame numUsers, numGames
+                # @todo do some clever stuff on users Vs games, for now just spawn
+                data =
+                    created: new Date
+                    started: null
+                    finished: null
+                    minPlayers: 1
+                    maxPlayers: 8
+                    width: 10
+                    height: 10
 
-    onRemoveActiveUser: ->
-        users = new UserMapper
+                games.create data, (game) =>
+                    games.addActive game.id, =>
 
-        users.countAllActive (numUsers) =>
-            console.log numUsers
+                        games[game.id] = new GameRunner @io, game
 
-    checkSpawnNewGame: (users, games) ->
-        # @todo do some clever stuff on users Vs games, for now just spawn
-        data =
-            created: new Date
-            started: null
-            finished: null
-            minPlayers: 1
-            maxPlayers: 8
-            width: 10
-            height: 10
+                        callback game
 
+    startGame: (id, callback) ->
+        @findGame id, (game) =>
+            return callback null if game is null
 
-        mapper = new GameMapper
-        mapper.create data, (game) =>
-            mapper.addActive game.id, =>
-                @io.sockets.emit "game:spawn", game
+            game.start()
+
+            callback true
+
+    findGame: (id, callback) ->
+        return callback null if not games[id]
+
+        callback games[id]
 
 module.exports = GameManager

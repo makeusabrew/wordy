@@ -1,5 +1,4 @@
 RedisMapper = require "./base"
-EventBus    = require "../lib/event_bus"
 bcrypt      = require "bcrypt"
 
 class UserMapper extends RedisMapper
@@ -50,14 +49,10 @@ class UserMapper extends RedisMapper
     ###
     addActive: (id, callback) ->
         @client.sadd "users:active", id, (err, result) ->
-            # @todo move behind client class...
-            EventBus.emit "redis:users:active:sadd"
             callback result
 
     removeActive: (id, callback) ->
         @client.srem "users:active", id, (err, result) ->
-            # @todo move behind client class...
-            EventBus.emit "redis:users:active:srem"
             callback result
 
     countAllActive: (callback) ->

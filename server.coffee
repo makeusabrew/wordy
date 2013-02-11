@@ -80,10 +80,4 @@ Redis.client.del "users:active"
 Redis.client.del "users:lobby"
 Redis.client.del "games:active"
 
-###
-# global event "routes"
-# note that of course unlike normal route loading, these will only
-# be run once and thus instantiate only one handler to deal with the
-# relevant events
-###
-require("./events/game").load io
+GameManager.io = io

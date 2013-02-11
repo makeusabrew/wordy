@@ -2,6 +2,8 @@ BaseController = require "./base"
 GameMapper     = require "../mappers/game"
 UserMapper     = require "../mappers/user"
 
+GameManager    = require "../managers/game"
+
 class LobbyController extends BaseController
     join: (data) ->
         gameMapper = new GameMapper
@@ -28,6 +30,9 @@ class LobbyController extends BaseController
 
                     # need this last otherwise socket will get both messages
                     @socket.join "lobby" # perhaps...
+
+                    GameManager.checkSpawnNewGame (game) =>
+                        @socket.emitAll "game:spawn", game if game
 
     leave: ->
         new UserMapper().removeFromLobby @socket.getUserId(), (result) =>

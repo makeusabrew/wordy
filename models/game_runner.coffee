@@ -1,3 +1,5 @@
+Bus = require "../lib/event_bus"
+
 class GameRunner
     constructor: (@io, @game) ->
         @timer = null
@@ -39,6 +41,9 @@ class GameRunner
             y: y
 
         data = [word]
+
+        # we want a controller to pick this up, but the trouble
+        # is controllers don't exist until new'd() by a socket
         @emitRoom "game:word:spawn", data
 
 module.exports = GameRunner

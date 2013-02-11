@@ -11,5 +11,9 @@ function LobbyController($rootScope, $scope, $location, client) {
         $scope.games = data.games;
     });
 
+    client.on("game:spawn", function(game) {
+        $scope.games.push(game);
+    });
+
     client.emit("lobby:join");
 }

@@ -6,4 +6,7 @@ module.exports =
 
         socket.on "game:join", (data) -> controller.join data
 
-        socket.on "game:word", (data) -> controller.submitWord data
+        socket.on "game:word", (data) ->
+            return unless socket.gameId
+            
+            controller.submitWord data

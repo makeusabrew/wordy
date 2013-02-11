@@ -88,5 +88,5 @@ function GameController($scope, $routeParams, client, d3) {
 
     $scope.submitWord = function() {
         client.emit("game:word", $scope.word);
-    });
+    };
 }
