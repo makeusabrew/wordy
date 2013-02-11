@@ -3,6 +3,10 @@ function GameController($scope, $routeParams, client, d3) {
     $scope.game = null;
     $scope.players = [];
     $scope.messages = [];
+    // user's text input
+    $scope.word = "";
+    // active game words
+    $scope.words = [];
 
     /**
      * init code
@@ -59,6 +63,7 @@ function GameController($scope, $routeParams, client, d3) {
             
             block
             .append("text")
+            .attr("class", "word")
             .attr("text-anchor", "middle")
             .attr("x", 25)
             .attr("y", 25)
@@ -79,5 +84,9 @@ function GameController($scope, $routeParams, client, d3) {
 
     client.on("game:message", function(message) {
         $scope.messages.push(message);
+    });
+
+    $scope.submitWord = function() {
+        client.emit("game:word", $scope.word);
     });
 }

@@ -9,21 +9,38 @@ class GameRunner
         @emitRoom "game:start"
         @queueWord()
 
+    getWidth: ->
+        @game.width
+
+    getHeight: ->
+        @game.height
+
     queueWord: ->
-        delay = 1000 + Math.ceil(Math.random()*5000)
 
         clearTimeout @timer
-        @timer = setTimeout =>
-            x = Math.floor(Math.random()*10)
-            y = Math.floor(Math.random()*10)
-            word =
-                text: "Wordy"
-                x: x
-                y: y
 
-            data = [word]
-            @emitRoom "game:word:spawn", data
+        @timer = setTimeout =>
+            @spawnWord()
             @queueWord()
-        , delay
+        , getRandomDelay()
+
+    spawnWord: ->
+        # @todo...
+        # first we need to check what slots we have available
+        # so that we don't pick a word which is far too big
+        # to fit in the remaining space
+
+        x = Math.floor(Math.random()*@getWidth())
+        y = Math.floor(Math.random()*@getHeight())
+
+        word =
+            text: "Wordy"
+            x: x
+            y: y
+
+        data = [word]
+        @emitRoom "game:word:spawn", data
 
 module.exports = GameRunner
+
+getRandomDelay = (min = 1000) -> min + Math.ceil(Math.random()*5000)

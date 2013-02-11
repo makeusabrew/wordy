@@ -27,4 +27,6 @@ class GameController extends BaseController
                     runner = new GameRunner @socket.io, game
                     runner.start()
 
+    submitWord: (word) ->
+        # find game id, find game runner, check word
 module.exports = GameController

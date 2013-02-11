@@ -5,3 +5,5 @@ module.exports =
         controller = new GameController socket
 
         socket.on "game:join", (data) -> controller.join data
+
+        socket.on "game:word", (data) -> controller.submitWord data
