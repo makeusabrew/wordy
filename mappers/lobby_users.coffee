@@ -1,0 +1,1 @@
+redis = require "../lib/redis"

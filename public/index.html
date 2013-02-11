@@ -1,0 +1,65 @@
+<!doctype html>
+<html ng-app="wordy">
+<head>
+    <title>Wordy</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.4/angular.min.js"></script>
+
+    <script src="/js/services/client.js"></script>
+    <script src="/js/services/d3.js"></script>
+
+    <script src="/js/app.js"></script>
+
+    <script src="/js/controllers/auth.js"></script>
+    <script src="/js/controllers/lobby.js"></script>
+    <script src="/js/controllers/chat.js"></script>
+    <script src="/js/controllers/game.js"></script>
+
+    <style>
+        svg {
+            border:1px solid #aaa;
+        }
+    </style>
+</head>
+<body>
+    <div ng-hide="connected">
+        Connecting&hellip;
+    </div>
+    <div ng-show="connected">
+        <div ng-controller="AuthController" ng-hide="user.authed">
+            <div ng-hide="regMode">
+                <h2>Please Log in</h2>
+                <form ng-submit="login()">
+                    <input type=text ng-model="user.username" required />
+                    <input type=password ng-model="user.password" required />
+
+                    <input type=submit value="Log in" />
+                </form>
+
+                <button ng-click="regMode = true">
+                    No account? Register instead.
+                </button>
+            </div>
+
+            <div ng-show="regMode">
+                <h2>Register</h2>
+
+                <form ng-submit="register()">
+                    <input type=text ng-model="regUser.username" required />
+                    <input type=password ng-model="regUser.password" required />
+
+                    <input type=submit value="Register" />
+                </form>
+
+                <button ng-click="regMode = false">
+                    Already got an account? Login instead.
+                </button>
+            </div>
+        </div>
+
+        <div ng-view></div>
+    </div>
+</body>
+</html>

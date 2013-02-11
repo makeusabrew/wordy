@@ -1,0 +1,11 @@
+<div ng-show="game">
+    Welcome to game ID {{game.id}}
+
+    <div class="game-svg"></div>
+
+    <ul>
+        <li ng-repeat="player in players">
+            {{player.username}}
+        </li>
+    </ul>
+</div>

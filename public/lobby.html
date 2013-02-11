@@ -1,0 +1,23 @@
+Hi {{user.username}}
+
+<div ng-controller="ChatController">
+    <h2>Chat</h2>
+    <ul>
+        <li ng-repeat="message in messages">
+            {{message}}
+        </li>
+    </ul>
+    <form ng-submit="send()">
+        <input ng-model="text" type="text" />
+    </form>
+</div>
+
+<div ng-controller="LobbyController">
+    <h2>Active Games</h2>
+    <ul>
+        <li ng-repeat="game in games">
+            {{game.id}}
+            <a href="" ng-click="join(game)">join</a>
+        </li>
+    </ul>
+</div>

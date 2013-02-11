@@ -1,0 +1,23 @@
+{
+    "name" : "wordy",
+    "version" : "0.0.0",
+    "private" : true,
+    "dependencies" : {
+        "express" : "3.x",
+        "socket.io" : "0.9.13",
+        "connect": "2.7.2",
+        "cookie": "0.0.5",
+        "coffee-script" : "1.4.0",
+        "mysql" : "2.0.0-alpha5",
+        "bcrypt": "0.7.3",
+        "redis": "0.8.2",
+        "hiredis": "0.1.14"
+    },
+    "devDependencies" : {
+        "mocha" : "1.7.4"
+    },
+    "scripts" : {
+        "test" : "NODE_ENV=test mocha",
+        "start" : "NODE_ENV=build coffee server.coffee"
+    }
+}
