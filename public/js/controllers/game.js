@@ -8,6 +8,11 @@ function GameController($scope, $routeParams, client, d3) {
     // active game words
     $scope.words = [];
 
+    $scope.submitWord = function() {
+        client.emit("game:word", $scope.word);
+        $scope.word = "";
+    };
+
     /**
      * init code
      */
@@ -53,6 +58,7 @@ function GameController($scope, $routeParams, client, d3) {
             var y = word.y * blockSize;
 
             var block = svg.append("g")
+            .attr("data-id", word.id)
             .attr("transform", "translate("+x+", "+y+")")
             .attr("opacity", 0);
 
@@ -86,7 +92,12 @@ function GameController($scope, $routeParams, client, d3) {
         $scope.messages.push(message);
     });
 
-    $scope.submitWord = function() {
-        client.emit("game:word", $scope.word);
-    };
+    client.on("game:word:claim", function(data) {
+        var block = svg.select("g[data-id='"+data.wordId+"']");
+
+        block.select("rect")
+        .attr("fill", "red");
+
+        $scope.messages.push("Player ["+data.userId+"] claimed word ["+data.wordId+"] for score ["+data.score+"]");
+    });
 }

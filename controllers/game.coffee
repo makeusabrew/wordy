@@ -31,8 +31,13 @@ class GameController extends BaseController
                         @socket.emitAll "game:start", game if started
 
     submitWord: (word) ->
-        # find game id, find game runner, check word
-        GameManager.findGame @socket.gameId, (game) =>
-            console.log "submit word #{word}"
-            
+        GameManager.claimWord @socket.gameId, @socket.getUserId(), word, (wordId, score) =>
+            if score
+                # well done! let everyone know
+                data =
+                    wordId: wordId
+                    score: score
+                    userId: @socket.getUserId()
+
+                @socket.emitRoom "game:#{@socket.gameId}", "game:word:claim", data
 module.exports = GameController

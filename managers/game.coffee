@@ -44,4 +44,12 @@ GameManager =
 
         callback games[id]
 
+    claimWord: (id, userId, word, callback) ->
+        @findGame id, (game) =>
+            return callback null if game is null
+
+            game.findWord word, (word, index) =>
+                game.claimWord userId, index, callback if word
+
+
 module.exports = GameManager
