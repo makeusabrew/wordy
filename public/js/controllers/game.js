@@ -62,16 +62,18 @@ function GameController($scope, $routeParams, client, d3) {
             .attr("transform", "translate("+x+", "+y+")")
             .attr("opacity", 0);
 
+            var blockWidth = blockSize*word.size;
+
             block
             .append("rect")
-            .attr("width", blockSize)
+            .attr("width", blockSize*word.size)
             .attr("height", blockSize);
             
             block
             .append("text")
             .attr("class", "word")
             .attr("text-anchor", "middle")
-            .attr("x", 25)
+            .attr("x", blockWidth/2)
             .attr("y", 25)
             .attr("fill", "white")
             .text(word.text);

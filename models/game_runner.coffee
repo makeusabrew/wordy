@@ -1,4 +1,4 @@
-Bus = require "../lib/event_bus"
+WordList = require "./word_list"
 
 class GameRunner
     constructor: (@io, @game) ->
@@ -37,13 +37,19 @@ class GameRunner
         x = Math.floor(Math.random()*@getWidth())
         y = Math.floor(Math.random()*@getHeight())
 
+        text = WordList.getRandomWord()
+
+        # @todo: un-hardcode 5 below - it's the amount of letters we can fit per tile
+        size = Math.ceil(text.length / 5)
+
         word =
-            text: "Wordy"
+            text: text
             x: x
             y: y
             claimed: false
             userId: null
             id: @wordId
+            size: size
 
         @wordId += 1
 
