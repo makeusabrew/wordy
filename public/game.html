@@ -1,11 +1,12 @@
 <div ng-show="game">
     Welcome to game ID {{game.id}}
+    Players: {{players.length}}/{{game.maxPlayers}}
 
     <div class="game-svg"></div>
 
     <ul>
-        <li ng-repeat="player in players">
-            {{player.username}}
+        <li ng-repeat="player in players | orderBy:playerScore">
+            {{player.username}} - {{playerScore(player)}}
         </li>
     </ul>
 
@@ -17,6 +18,6 @@
     </ul>
 
     <form ng-submit="submitWord()">
-        <input ng-model="word" type="text" />
+        <input ng-model="word" type="text" placeholder="Type a word..." />
     </form>
 </div>

@@ -3,14 +3,17 @@ function GameController($scope, $routeParams, client, d3) {
     $scope.game = null;
     $scope.players = [];
     $scope.messages = [];
-    // user's text input
     $scope.word = "";
-    // active game words
     $scope.words = [];
+    $scope.scores = {};
 
     $scope.submitWord = function() {
         client.emit("game:word", $scope.word);
         $scope.word = "";
+    };
+
+    $scope.playerScore = function(player) {
+        return $scope.scores[player.id] || 0;
     };
 
     /**
@@ -74,7 +77,7 @@ function GameController($scope, $routeParams, client, d3) {
             .attr("class", "word")
             .attr("text-anchor", "middle")
             .attr("x", blockWidth/2)
-            .attr("y", 25)
+            .attr("y", 26)
             .attr("fill", "white")
             .text(word.text);
 
@@ -100,6 +103,12 @@ function GameController($scope, $routeParams, client, d3) {
 
         block.select("rect")
         .attr("fill", "red");
+
+        var userId = data.userId;
+        if (typeof $scope.scores[userId] === 'undefined') {
+            $scope.scores[userId] = 0;
+        }
+        $scope.scores[userId] += data.score;
 
         $scope.messages.push("Player ["+data.userId+"] claimed word ["+data.wordId+"] for score ["+data.score+"]");
     });
