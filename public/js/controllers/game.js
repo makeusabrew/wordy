@@ -6,6 +6,7 @@ function GameController($scope, $routeParams, client, d3) {
     $scope.word = "";
     $scope.words = [];
     $scope.scores = {};
+    $scope.slots = {};
 
     $scope.submitWord = function() {
         client.emit("game:word", $scope.word);
@@ -58,6 +59,8 @@ function GameController($scope, $routeParams, client, d3) {
     client.on("game:word:spawn", function(data) {
         data.forEach(function(word) {
 
+            $scope.slots.available -= word.size;
+
             $scope.words.push(word);
 
             var x = word.x * blockSize;
@@ -101,6 +104,8 @@ function GameController($scope, $routeParams, client, d3) {
     client.on("game:status", function(data) {
         $scope.game = data;
         $scope.players = data.users;
+
+        $scope.slots.total = $scope.slots.available = data.width * data.height;
     });
 
     client.on("game:user:join", function(data) {
