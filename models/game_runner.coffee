@@ -6,9 +6,9 @@ class GameRunner
         @words = []
         @wordId = 1
         @grid = {}
-        for x in [0..@game.width]
+        for x in [0..@game.width-1]
             @grid[x] = {}
-            for y in [0..@game.height]
+            for y in [0..@game.height-1]
                 @grid[x][y] = 0
 
     emitRoom: (msg, data) ->
@@ -79,7 +79,7 @@ class GameRunner
 
         for p in [v.start..v.end]
             # horizontal
-            if word.rotation % 2
+            if word.rotation % 2 == 0
                 x = p
                 y = word.y
             else
@@ -95,7 +95,7 @@ class GameRunner
 
         for p in [v.start..v.end]
             # horizontal
-            if word.rotation % 2
+            if word.rotation % 2 == 0
                 x = p
                 y = word.y
             else

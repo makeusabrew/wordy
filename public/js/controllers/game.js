@@ -60,13 +60,18 @@ function GameController($scope, $routeParams, client, d3) {
             var x = word.x * blockSize;
             var y = word.y * blockSize;
 
-            var angle = word.rotation*90;
-            var block = svg.append("g")
-            .attr("data-id", word.id)
-            .attr("transform", "translate("+x+", "+y+") rotate("+angle+")")
-            .attr("opacity", 0);
 
             var blockWidth = blockSize*word.size;
+            var r = {
+                angle: word.rotation*90,
+                x: blockSize / 2,
+                y: blockSize / 2
+            };
+
+            var block = svg.append("g")
+            .attr("data-id", word.id)
+            .attr("transform", "translate("+x+", "+y+") rotate("+r.angle+", "+r.x+", "+r.y+")")
+            .attr("opacity", 0);
 
             block
             .append("rect")
