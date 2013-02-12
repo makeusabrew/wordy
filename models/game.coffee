@@ -91,6 +91,7 @@ class Game
         score = @words[index].text.length
 
         if @lastWordUserId is userId
+            # @todo cap combo at some point...
             @wordCombo += 1
         else
             @lastWordUserId = userId

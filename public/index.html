@@ -18,6 +18,7 @@
     <script src="/js/controllers/game.js"></script>
 
     <link rel="stylesheet" type="text/css" href="/css/deps/compiled.inuit.css" />
+    <link rel="stylesheet" type="text/css" href="/css/style.css" />
 </head>
 <body>
     <div ng-hide="connected">
@@ -28,10 +29,21 @@
             <div ng-hide="regMode">
                 <h2>Please Log in</h2>
                 <form ng-submit="login()">
-                    <input type=text ng-model="user.username" required />
-                    <input type=password ng-model="user.password" required />
+                    <ul class=form-fields>
+                        <li>
+                            <label for=username>Username:</label>
+                            <input type=text ng-model="user.username" required />
+                        </li>
 
-                    <input type=submit value="Log in" />
+                        <li>
+                            <label for=password>Password:</label>
+                            <input type=password ng-model="user.password" required />
+                        </li>
+
+                        <li>
+                            <input type=submit value="Log in" />
+                        </li>
+                    </ul>
                 </form>
 
                 <button ng-click="regMode = true">
@@ -43,16 +55,26 @@
                 <h2>Register</h2>
 
                 <form ng-submit="register()">
-                    <label for=username>Username:</label>
-                    <input type=text ng-model="regUser.username" required />
+                    <ul class=form-fields>
+                        <li>
+                            <label for=username>Username:</label>
+                            <input type=text ng-model="regUser.username" required />
+                        </li>
 
-                    <label for=email>Email:</label>
-                    <input type=email ng-model="regUser.email" required />
+                        <li>
+                            <label for=email>Email:</label>
+                            <input type=email ng-model="regUser.email" required />
+                        </li>
 
-                    <label for=password>Password:</label>
-                    <input type=password ng-model="regUser.password" required />
+                        <li>
+                            <label for=password>Password:</label>
+                            <input type=password ng-model="regUser.password" required />
+                        </li>
 
-                    <input type=submit value="Register" />
+                        <li>
+                            <input type=submit value="Register" />
+                        </li>
+                    </li>
                 </form>
 
                 <button ng-click="regMode = false">

@@ -1,25 +1,33 @@
-<div ng-show="game">
-    Welcome to game ID {{game.id}}
-    Players: {{players.length}}/{{game.maxPlayers}}
-    Tiles remaining: {{slots.available}}/{{slots.total}}
+<div ng-show="game" class=gw>
+    <div class="g   two-thirds">
+        Welcome to game ID {{game.id}}
+        Players: {{players.length}}/{{game.maxPlayers}}
+        Tiles remaining: {{slots.available}}/{{slots.total}}
 
-    <div class="game-svg"></div>
+        <div class="game-svg"></div>
+    </div>
 
-    <ul>
-        <li ng-repeat="player in players | orderBy:playerScore:true">
-            <img ng-src="{{playerAvatar(player)}}" width="32" height="32" />
-            {{player.username}} - {{playerScore(player)}}
-        </li>
-    </ul>
+    <div class="g   one-third">
+        <ul>
+            <li ng-repeat="player in players | orderBy:playerScore:true">
+                <img ng-src="{{playerAvatar(player)}}" width="32" height="32" />
+                {{player.username}} - {{playerScore(player)}}
+            </li>
+        </ul>
+    </div>
 
     <!-- ticker messages; game notifications basically -->
-    <ul>
-        <li ng-repeat="message in messages">
-            {{message}}
-        </li>
-    </ul>
+    <div class="g   two-thirds">
+        <ul>
+            <li ng-repeat="message in messages">
+                {{message}}
+            </li>
+        </ul>
+    </div>
 
-    <form ng-submit="submitWord()">
-        <input ng-model="word" type="text" placeholder="Type a word..." />
-    </form>
+    <div class="g   one-third">
+        <form ng-submit="submitWord()">
+            <input ng-model="word" type="text" placeholder="Type a word..." />
+        </form>
+    </div>
 </div>
