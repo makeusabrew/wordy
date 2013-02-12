@@ -5,9 +5,9 @@ class GameRunner
         @timer = null
         @words = []
         @wordId = 1
-        @grid = []
+        @grid = {}
         for x in [0..@game.width]
-            @grid[x] = []
+            @grid[x] = {}
             for y in [0..@game.height]
                 @grid[x][y] = 0
 
@@ -34,10 +34,6 @@ class GameRunner
         , getRandomDelay()
 
     spawnWord: ->
-        # @todo...
-        # first we need to check what slots we have available
-        # so that we don't pick a word which is far too big
-        # to fit in the remaining space
 
         word = @getRandomWordAndPosition()
 
@@ -47,7 +43,6 @@ class GameRunner
         word.userId = null
         word.id = @wordId
         word.flipped = false
-        word.rotation = 0
 
         @wordId += 1
 
@@ -80,22 +75,66 @@ class GameRunner
         callback @words[index].id, score
 
     dirtyGrid: (word) ->
-        start = word.x
-        len = start + word.size - 1
-        for x in [start..len]
-            @grid[x][word.y] = word.id
+        v = @getVector word
+
+        for p in [v.start..v.end]
+            # horizontal
+            if word.rotation % 2
+                x = p
+                y = word.y
+            else
+                x = word.x
+                y = p
+            @grid[x][y] = word.id
 
     gridTaken: (word) ->
-        start = word.x
-        len = start + word.size - 1
+        v = @getVector word
 
         # can't spawn off the grid
-        return true if len >= @getWidth()
+        return true if @offGrid v
 
-        for x in [start..len]
-            return true if @grid[x][word.y] > 0
+        for p in [v.start..v.end]
+            # horizontal
+            if word.rotation % 2
+                x = p
+                y = word.y
+            else
+                x = word.x
+                y = p
+            return true if @grid[x][y] > 0
 
         return false
+
+    getVector: (word) ->
+        vector =
+            rotation: word.rotation
+
+        if word.rotation % 2 == 0
+            start = word.x
+        else
+            start = word.y
+
+        switch word.rotation
+            # right and down are considered positive
+            when 0, 1
+                end = start + (word.size - 1)
+            # left and up are considered negative
+            when 2, 3
+                end = start - (word.size - 1)
+
+        vector.start = start
+        vector.end = end
+
+        return vector
+
+    offGrid: (vector) ->
+        # horizontal; only care about X
+        if vector.rotation % 2 is 0
+            fn = @getWidth
+        else
+            fn = @getHeight
+
+        return vector.end < 0 or vector.end >= fn.apply this
 
     getRandomWordAndPosition: (attempts = 10) ->
         x = Math.floor(Math.random()*@getWidth())
@@ -111,6 +150,7 @@ class GameRunner
             y: y
             text: text
             size: size
+            rotation: Math.floor(Math.random()*4)
 
         return word if not @gridTaken word
 
