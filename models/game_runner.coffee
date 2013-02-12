@@ -59,6 +59,9 @@ class GameRunner
 
         # we want a controller to pick this up, but the trouble
         # is controllers don't exist until new'd() by a socket
+        # this is the only current example of anything other than
+        # a controller emitting socket messages: quite tempted to
+        # push the queue requests to the client(s)
         @emitRoom "game:word:spawn", data
 
     findWord: (input, callback) ->

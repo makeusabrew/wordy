@@ -84,10 +84,11 @@ function GameController($scope, $routeParams, client, d3) {
 
     client.on("game:status", function(data) {
         $scope.game = data.game;
+        $scope.players = data.users;
     });
 
     client.on("game:user:join", function(data) {
-        $scope.users.push(data);
+        $scope.players.push(data);
     });
 
     client.on("game:message", function(message) {
