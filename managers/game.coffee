@@ -41,7 +41,7 @@ GameManager =
                     created: new Date
                     started: null
                     finished: null
-                    minPlayers: 2
+                    minPlayers: 1
                     maxPlayers: 8
                     width: 10
                     height: 10

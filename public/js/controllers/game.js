@@ -73,6 +73,9 @@ function GameController($scope, $routeParams, client, d3) {
 
             var block = svg.append("g")
             .attr("data-id", word.id)
+            .attr("data-angle", r.angle)
+            .attr("data-x", x)
+            .attr("data-y", y)
             .attr("transform", "translate("+x+", "+y+") rotate("+r.angle+", "+r.x+", "+r.y+")")
             .attr("opacity", 0);
 
@@ -114,11 +117,34 @@ function GameController($scope, $routeParams, client, d3) {
         var player = getPlayer(data.userId);
 
         var rect = block.select("rect");
+        var xOff = 0,
+            yOff = 0;
+
+        switch (+block.attr("data-angle")) {
+            case 0:
+                xOff = blockSize;
+                break;
+            case 90:
+                yOff = blockSize;
+                break;
+            case 180:
+                xOff = -blockSize;
+                break;
+            case 270:
+                yOff = -blockSize;
+                break;
+        }
 
         for (var i = 0, j = rect.attr("data-size"); i < j; i++) {
-            block.append("image")
+            // we want to append straight to SVG otherwise we'll
+            // have to undo all the rotation already applied on
+            // the group
+            // however, having to work out all the offsets and
+            // stuff extra data against the block is not ideal...
+            svg.append("image")
             .attr("xlink:href", $scope.playerAvatar(player))
-            .attr("x", i*blockSize)
+            .attr("x", +block.attr("data-x")+(xOff*i))
+            .attr("y", +block.attr("data-y")+(yOff*i))
             .attr("width", blockSize)
             .attr("height", blockSize);
         }
