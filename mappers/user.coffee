@@ -31,6 +31,7 @@ class UserMapper extends RedisMapper
                     id: id
                     password: hash
                     username: data.username
+                    email: data.email
 
                 @client.set "user:#{id}:object", JSON.stringify(object), (err, result) =>
                     callback object

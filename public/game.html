@@ -7,6 +7,7 @@
 
     <ul>
         <li ng-repeat="player in players | orderBy:playerScore">
+            <img ng-src="{{playerAvatar(player)}}" />
             {{player.username}} - {{playerScore(player)}}
         </li>
     </ul>

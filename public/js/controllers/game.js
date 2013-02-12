@@ -57,6 +57,9 @@ function GameController($scope, $routeParams, client, d3) {
      */
     client.on("game:word:spawn", function(data) {
         data.forEach(function(word) {
+
+            $scope.words.push(word);
+
             var x = word.x * blockSize;
             var y = word.y * blockSize;
 
@@ -75,6 +78,7 @@ function GameController($scope, $routeParams, client, d3) {
 
             block
             .append("rect")
+            .attr("data-size", word.size)
             .attr("width", blockSize*word.size)
             .attr("height", blockSize);
             
@@ -107,8 +111,17 @@ function GameController($scope, $routeParams, client, d3) {
     client.on("game:word:claim", function(data) {
         var block = svg.select("g[data-id='"+data.wordId+"']");
 
-        block.select("rect")
-        .attr("fill", "red");
+        var player = getPlayer(data.userId);
+
+        var rect = block.select("rect");
+
+        for (var i = 0, j = rect.attr("data-size"); i < j; i++) {
+            block.append("image")
+            .attr("xlink:href", $scope.playerAvatar(player))
+            .attr("x", i*blockSize)
+            .attr("width", blockSize)
+            .attr("height", blockSize);
+        }
 
         var userId = data.userId;
         if (typeof $scope.scores[userId] === 'undefined') {
@@ -118,4 +131,18 @@ function GameController($scope, $routeParams, client, d3) {
 
         $scope.messages.push("Player ["+data.userId+"] claimed word ["+data.wordId+"] for score ["+data.score+"]");
     });
+
+    $scope.playerAvatar = function(player) {
+        return "http://www.gravatar.com/avatar/"+player.emailHash+"?d=retro";
+    };
+
+    function getPlayer(id) {
+        var i = $scope.players.length;
+        while (i--) {
+            var player = $scope.players[i];
+            if (player.id == id) {
+                return player;
+            }
+        }
+    }
 }

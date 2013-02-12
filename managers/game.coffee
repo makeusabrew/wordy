@@ -50,6 +50,7 @@ GameManager =
 
                 games.create data, (game) =>
                     @addActive new Game(@io, game), =>
+                        # @todo this is inconsistent; it just returns a simple object instead of a Game class
                         callback game
 
     findGame: (id, callback) ->
