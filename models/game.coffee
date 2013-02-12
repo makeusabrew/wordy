@@ -16,6 +16,9 @@ class Game
             for y in [0..@height-1]
                 @grid[x][y] = 0
 
+        @lastWordUserId = 0
+        @wordCombo = 1
+
     fromObject: (object) ->
         @[key] = object[key] for key in @properties
 
@@ -85,8 +88,16 @@ class Game
         @words[index].claimed = true
         @words[index].userId = userId
 
-        # @todo run through score logic
         score = @words[index].text.length
+
+        if @lastWordUserId is userId
+            @wordCombo += 1
+        else
+            @lastWordUserId = userId
+            @wordCombo = 1
+
+        score *= @wordCombo
+
         callback @words[index].id, score
 
     dirtyGrid: (word) ->
