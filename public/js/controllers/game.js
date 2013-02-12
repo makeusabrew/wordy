@@ -92,7 +92,7 @@ function GameController($scope, $routeParams, client, d3) {
     });
 
     client.on("game:status", function(data) {
-        $scope.game = data.game;
+        $scope.game = data;
         $scope.players = data.users;
     });
 

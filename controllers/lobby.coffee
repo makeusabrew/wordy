@@ -1,17 +1,14 @@
 BaseController = require "./base"
-GameMapper     = require "../mappers/game"
 
 GameManager    = require "../managers/game"
 UserManager    = require "../managers/user"
 
 class LobbyController extends BaseController
     join: (data) ->
-        gameMapper = new GameMapper
-
         # well, we *have* to join the lobby...
         UserManager.addToLobby @socket.user, =>
             # and we have to get the games too...
-            gameMapper.findAllActive (games) =>
+            GameManager.findAllActive (games) =>
                 # and, well, we need to get the list of lobby users
                 UserManager.findAllLobby (users) =>
 

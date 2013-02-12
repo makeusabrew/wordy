@@ -1,28 +1,39 @@
 WordList = require "./word_list"
 
-class GameRunner
-    constructor: (@io, @game) ->
+class Game
+    properties: [
+        "id", "minPlayers", "maxPlayers", "started", "width", "height", "finished", "created"
+    ]
+
+    constructor: (@io, object) ->
+        @fromObject object
         @timer = null
         @words = []
         @wordId = 1
         @grid = {}
-        for x in [0..@game.width-1]
+        for x in [0..@width-1]
             @grid[x] = {}
-            for y in [0..@game.height-1]
+            for y in [0..@height-1]
                 @grid[x][y] = 0
 
+    fromObject: (object) ->
+        @[key] = object[key] for key in @properties
+
+    toObject: ->
+        object = {}
+
+        object[key] = @[key] for key in @properties
+
+        object.users = @users
+
+        return object
+
     emitRoom: (msg, data) ->
-        @io.sockets.in("game:#{@game.id}").emit msg, data
+        @io.sockets.in("game:#{@id}").emit msg, data
 
     start: ->
         @emitRoom "game:start"
         @queueWord()
-
-    getWidth: ->
-        @game.width
-
-    getHeight: ->
-        @game.height
 
     queueWord: ->
 
@@ -134,15 +145,15 @@ class GameRunner
     offGrid: (vector) ->
         # horizontal; only care about X
         if vector.rotation % 2 is 0
-            fn = @getWidth
+            value = @width
         else
-            fn = @getHeight
+            value = @height
 
-        return vector.end < 0 or vector.end >= fn.apply this
+        return vector.end < 0 or vector.end >= value
 
     getRandomWordAndPosition: (attempts = 20) ->
-        x = Math.floor(Math.random()*@getWidth())
-        y = Math.floor(Math.random()*@getHeight())
+        x = Math.floor(Math.random()*@width)
+        y = Math.floor(Math.random()*@height)
 
         text = WordList.getRandomWord()
 
@@ -164,6 +175,6 @@ class GameRunner
             console.log "panic - no slots left"
             return null
 
-module.exports = GameRunner
+module.exports = Game
 
 getRandomDelay = (min = 250) -> min + Math.ceil(Math.random()*7000)

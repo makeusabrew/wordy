@@ -23,6 +23,7 @@ angular.module("client", [])
     };
 
     that.emit = function(msg, data) {
+        console.log(msg, data);
         socket.emit(msg, data);
     };
 

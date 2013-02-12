@@ -30,6 +30,8 @@ UserManager =
         delete lobbyUsers[user.id]
         callback()
 
-    findAllLobby: (callback) -> callback lobbyUsers
+    findAllLobby: (callback) ->
+        flat = (user for user of lobbyUsers)
+        callback flat
 
 module.exports = UserManager

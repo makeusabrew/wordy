@@ -1,5 +1,5 @@
 GameMapper = require "../mappers/game"
-GameRunner = require "../models/game_runner"
+Game       = require "../models/game_runner"
 UserManager= require "./user"
 
 games = {}
@@ -7,11 +7,35 @@ games = {}
 GameManager =
     io: null
 
+    addActive: (game, callback) ->
+        games[game.id] = game
+        callback()
+
+    countAllActive: (callback) ->
+        count = 0
+        count += 1 for game of games
+
+        callback count
+
+    findAllActive: (callback) ->
+        flat = (game for game of games)
+        callback flat
+
+    addUserToGame: (user, game, callback) ->
+        if not game.users
+            game.users = []
+
+        game.users.push user
+
+        callback()
+
+    findUsers: (id, callback) ->
+        callback game[id].users
+
     checkSpawnNewGame: (callback) ->
-        games = new GameMapper
 
         UserManager.countAllActive (numUsers) =>
-            games.countAllActive (numGames) =>
+            @countAllActive (numGames) =>
                 # @todo do some clever stuff on users Vs games, for now just spawn
                 data =
                     created: new Date
@@ -22,20 +46,11 @@ GameManager =
                     width: 10
                     height: 10
 
+                games = new GameMapper
+
                 games.create data, (game) =>
-                    games.addActive game.id, =>
-
-                        games[game.id] = new GameRunner @io, game
-
+                    @addActive new Game(@io, game), =>
                         callback game
-
-    startGame: (id, callback) ->
-        @findGame id, (game) =>
-            return callback null if game is null
-
-            game.start()
-
-            callback true
 
     findGame: (id, callback) ->
         return callback null if not games[id]
@@ -48,6 +63,15 @@ GameManager =
 
             game.findWord word, (word, index) =>
                 game.claimWord userId, index, callback if word
+
+    canStartGame: (game, callback) ->
+        if game.users.length >= game.minPlayers and not game.started
+
+            game.start()
+            return callback true
+
+        callback false
+
 
 
 module.exports = GameManager
