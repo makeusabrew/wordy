@@ -5,7 +5,7 @@ class Game
         "id", "minPlayers", "maxPlayers", "started", "width", "height", "finished", "created"
     ]
 
-    constructor: (@io, object) ->
+    constructor: (object) ->
         @fromObject object
         @timer = null
         @words = []
@@ -29,7 +29,7 @@ class Game
         return object
 
     emitRoom: (msg, data) ->
-        @io.sockets.in("game:#{@id}").emit msg, data
+        require("../managers/game").io.sockets.in("game:#{@id}").emit msg, data
 
     start: ->
         @emitRoom "game:start"

@@ -18,7 +18,7 @@ GameManager =
         callback count
 
     findAllActive: (callback) ->
-        flat = (game for game of games)
+        flat = (game.toObject() for key, game of games)
         callback flat
 
     addUserToGame: (user, game, callback) ->
@@ -41,15 +41,13 @@ GameManager =
                     created: new Date
                     started: null
                     finished: null
-                    minPlayers: 1
+                    minPlayers: 2
                     maxPlayers: 8
                     width: 10
                     height: 10
 
-                games = new GameMapper
-
-                games.create data, (game) =>
-                    @addActive new Game(@io, game), =>
+                (new GameMapper).create data, (game) =>
+                    @addActive new Game(game), =>
                         # @todo this is inconsistent; it just returns a simple object instead of a Game class
                         callback game
 
@@ -72,7 +70,5 @@ GameManager =
             return callback true
 
         callback false
-
-
 
 module.exports = GameManager

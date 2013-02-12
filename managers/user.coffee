@@ -31,7 +31,7 @@ UserManager =
         callback()
 
     findAllLobby: (callback) ->
-        flat = (user for user of lobbyUsers)
+        flat = (user for key, user of lobbyUsers)
         callback flat
 
 module.exports = UserManager
