@@ -97,7 +97,10 @@ function GameController($scope, $routeParams, client, d3) {
             .attr("fill", "white")
             .text(word.text);
 
-            block.transition().attr("opacity", "1");
+            block
+            .transition()
+            .duration(500)
+            .attr("opacity", "1");
         });
     });
 
@@ -151,7 +154,10 @@ function GameController($scope, $routeParams, client, d3) {
             .attr("x", +block.attr("data-x")+(xOff*i))
             .attr("y", +block.attr("data-y")+(yOff*i))
             .attr("width", blockSize)
-            .attr("height", blockSize);
+            .attr("height", blockSize)
+            .attr("opacity", 0)
+            .transition()
+            .attr("opacity", 0.65);
         }
 
         var userId = data.userId;

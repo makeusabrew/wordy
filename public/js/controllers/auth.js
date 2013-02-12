@@ -2,8 +2,6 @@ function AuthController($rootScope, $scope, $location, client) {
 
     // need a private user in case of reg
     $scope.regUser  = {};
-    // which form?
-    $scope.regMode = false;
 
     $scope.login = function() {
         client.emit("auth:login", $rootScope.user);
