@@ -1,6 +1,6 @@
-GameMapper = require "../mappers/game"
-Game       = require "../models/game_runner"
-UserManager= require "./user"
+GameMapper  = require "../mappers/game"
+UserManager = require "./user"
+Game        = require "../models/game"
 
 games = {}
 
