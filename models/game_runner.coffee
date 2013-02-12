@@ -35,22 +35,26 @@ class GameRunner
 
     spawnWord: ->
 
-        word = @getRandomWordAndPosition()
+        data = []
+        numWords = 1+ Math.floor(Math.random()*3)
 
-        return if word is null
+        for x in [1..numWords]
+            word = @getRandomWordAndPosition()
+            if word
 
-        word.claimed = false
-        word.userId = null
-        word.id = @wordId
-        word.flipped = false
+                word.claimed = false
+                word.userId = null
+                word.id = @wordId
+                word.flipped = false
 
-        @wordId += 1
+                @wordId += 1
+                @words.push word
 
-        @words.push word
+                @dirtyGrid word
 
-        data = [word]
+                data.push word
 
-        @dirtyGrid word
+        return if data.length is 0
 
         # we want a controller to pick this up, but the trouble
         # is controllers don't exist until new'd() by a socket
@@ -136,7 +140,7 @@ class GameRunner
 
         return vector.end < 0 or vector.end >= fn.apply this
 
-    getRandomWordAndPosition: (attempts = 10) ->
+    getRandomWordAndPosition: (attempts = 20) ->
         x = Math.floor(Math.random()*@getWidth())
         y = Math.floor(Math.random()*@getHeight())
 
