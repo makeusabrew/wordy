@@ -1,22 +1,19 @@
 BaseController = require "./base"
 GameMapper     = require "../mappers/game"
-UserMapper     = require "../mappers/user"
 
 GameManager    = require "../managers/game"
+UserManager    = require "../managers/user"
 
 class LobbyController extends BaseController
     join: (data) ->
         gameMapper = new GameMapper
-        userMapper = new UserMapper
-
-        # too much redis?
 
         # well, we *have* to join the lobby...
-        userMapper.addToLobby @socket.getUserId(), (result) =>
+        UserManager.addToLobby @socket.user, =>
             # and we have to get the games too...
             gameMapper.findAllActive (games) =>
                 # and, well, we need to get the list of lobby users
-                userMapper.findAllLobby (users) =>
+                UserManager.findAllLobby (users) =>
 
                     data =
                         users: users
@@ -35,7 +32,7 @@ class LobbyController extends BaseController
                         @socket.emitAll "game:spawn", game if game
 
     leave: ->
-        new UserMapper().removeFromLobby @socket.getUserId(), (result) =>
+        UserManager.removeFromLobby @socket.user, =>
             @socket.leave "lobby"
             @socket.emitRoom "lobby", "lobby:user:leave", @socket.user
 

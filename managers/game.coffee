@@ -1,7 +1,6 @@
 GameMapper = require "../mappers/game"
-UserMapper = require "../mappers/user"
-
 GameRunner = require "../models/game_runner"
+UserManager= require "./user"
 
 games = {}
 
@@ -9,10 +8,9 @@ GameManager =
     io: null
 
     checkSpawnNewGame: (callback) ->
-        users = new UserMapper
         games = new GameMapper
 
-        users.countAllActive (numUsers) =>
+        UserManager.countAllActive (numUsers) =>
             games.countAllActive (numGames) =>
                 # @todo do some clever stuff on users Vs games, for now just spawn
                 data =

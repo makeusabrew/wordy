@@ -35,40 +35,4 @@ class UserMapper extends RedisMapper
                 @client.set "user:#{id}:object", JSON.stringify(object), (err, result) =>
                     callback object
 
-    findAllLobby: (callback) ->
-        @client.smembers "users:lobby", (err, results) =>
-            queries = []
-            queries.push "user:#{id}:object" for id in results
-
-            @client.mget queries, (err, results) =>
-
-                callback @toCollection results
-
-    ###
-    # simply keep track of *all* active users (logged in)
-    ###
-    addActive: (id, callback) ->
-        @client.sadd "users:active", id, (err, result) ->
-            callback result
-
-    removeActive: (id, callback) ->
-        @client.srem "users:active", id, (err, result) ->
-            callback result
-
-    countAllActive: (callback) ->
-        @client.scard "users:active", (err, count) =>
-            callback count
-
-    ###
-    # a subset of active really; who's in the lobby?
-    ###
-    addToLobby: (id, callback) ->
-        @client.sadd "users:lobby", id, (err, result) ->
-            callback result
-
-    removeFromLobby: (id, callback) ->
-        @client.srem "users:lobby", id, (err, result) ->
-            callback result
-
-
 module.exports = UserMapper

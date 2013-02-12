@@ -1,5 +1,6 @@
 BaseController = require "./base"
 UserMapper     = require "../mappers/user"
+UserManager    = require "../managers/user"
 
 class AuthController extends BaseController
     login: (data) ->
@@ -21,15 +22,13 @@ class AuthController extends BaseController
                 @_authUser result
 
     disconnect: ->
-        mapper = new UserMapper
-
-        mapper.removeActive @socket.user.id, (result) =>
-            console.log "de-authed #{@socket.user.id}"
+        UserManager.removeActive @socket.user, =>
+            # we need to emit a pretty global message here since
+            # it affects clients in all states
+            @socket.emitAll "user:disconnect", @socket.user
 
     _authUser: (user) ->
-        mapper = new UserMapper
-
-        mapper.addActive user.id, (result) =>
+        UserManager.addActive user, =>
             @socket.authUser user
             @socket.emit "auth:login:success", user
 
