@@ -1,4 +1,4 @@
-words = ["wordy", "cat", "speciality", "quebec", "zoology"]
+words = ["wordy", "cat", "speciality", "quebec", "zoology", "think", "would", "their", "there", "over", "could", "good", "apparent", "back", "cite", "overlook", "redundant"]
 
 module.exports =
     getRandomWord: ->
