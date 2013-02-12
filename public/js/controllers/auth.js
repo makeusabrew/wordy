@@ -13,6 +13,14 @@ function AuthController($rootScope, $scope, $location, client) {
         client.emit("auth:register", $scope.regUser);
     };
 
+    $scope.doLogin = function() {
+        $location.path("/login");
+    };
+
+    $scope.doRegister = function() {
+        $location.path("/register");
+    };
+
     client.on("auth:login:success", function(data) {
         data.password = null;
         data.authed = true;

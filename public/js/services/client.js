@@ -5,11 +5,11 @@ angular.module("client", [])
         user   = {},
         that   = {};
 
-    that.connect = function() {
+    that.connect = function(callback) {
         socket = $window.io.connect();
 
         that.on("connect", function() {
-            $rootScope.connected = true;
+            callback();
         });
     };
 

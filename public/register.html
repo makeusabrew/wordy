@@ -1,0 +1,28 @@
+<h2>Register</h2>
+
+<form ng-submit="register()">
+    <ul class=form-fields>
+        <li>
+            <label for=username>Username:</label>
+            <input type=text ng-model="regUser.username" required />
+        </li>
+
+        <li>
+            <label for=email>Email:</label>
+            <input type=email ng-model="regUser.email" required />
+        </li>
+
+        <li>
+            <label for=password>Password:</label>
+            <input type=password ng-model="regUser.password" required />
+        </li>
+
+        <li>
+            <input type=submit value="Register" />
+        </li>
+    </li>
+</form>
+
+<button ng-click="doLogin()">
+    Already got an account? Login instead.
+</button>

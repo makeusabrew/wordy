@@ -21,69 +21,8 @@
     <link rel="stylesheet" type="text/css" href="/css/style.css" />
 </head>
 <body>
-    <div ng-hide="connected">
-        Connecting&hellip;
-    </div>
-    <div ng-show="connected">
-        <div ng-controller="AuthController" ng-hide="user.authed">
-            <div ng-hide="regMode">
-                <h2>Please Log in</h2>
-                <form ng-submit="login()">
-                    <ul class=form-fields>
-                        <li>
-                            <label for=username>Username:</label>
-                            <input type=text ng-model="user.username" required />
-                        </li>
-
-                        <li>
-                            <label for=password>Password:</label>
-                            <input type=password ng-model="user.password" required />
-                        </li>
-
-                        <li>
-                            <input type=submit value="Log in" />
-                        </li>
-                    </ul>
-                </form>
-
-                <button ng-click="regMode = true">
-                    No account? Register instead.
-                </button>
-            </div>
-
-            <div ng-show="regMode">
-                <h2>Register</h2>
-
-                <form ng-submit="register()">
-                    <ul class=form-fields>
-                        <li>
-                            <label for=username>Username:</label>
-                            <input type=text ng-model="regUser.username" required />
-                        </li>
-
-                        <li>
-                            <label for=email>Email:</label>
-                            <input type=email ng-model="regUser.email" required />
-                        </li>
-
-                        <li>
-                            <label for=password>Password:</label>
-                            <input type=password ng-model="regUser.password" required />
-                        </li>
-
-                        <li>
-                            <input type=submit value="Register" />
-                        </li>
-                    </li>
-                </form>
-
-                <button ng-click="regMode = false">
-                    Already got an account? Login instead.
-                </button>
-            </div>
-        </div>
-
-        <div ng-view></div>
+    <span ng-hide="connected">Connecting&hellip;</span>
+    <div ng-view>
     </div>
 </body>
 </html>
