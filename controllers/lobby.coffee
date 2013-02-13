@@ -2,25 +2,23 @@ BaseController = require "./base"
 
 GameManager    = require "../managers/game"
 UserManager    = require "../managers/user"
+ChatManager    = require "../managers/chat"
 
 class LobbyController extends BaseController
     join: (data) ->
         # well, we *have* to join the lobby...
         UserManager.addToLobby @socket.user, =>
-            # and we have to get the games too...
-            GameManager.findAllActive (games) =>
-                # and, well, we need to get the list of lobby users
-                UserManager.findAllLobby (users) =>
+            # let everyone else in the room know the new user is present
+            @socket.emitRoom "lobby", "lobby:user:join", @socket.user
 
-                    data =
-                        users: users
-                        games: games
+            # add the chat line
+            ChatManager.addNotification "#{@socket.user.username} has entered the lobby", (message) =>
+                @socket.emitAll "chat:message", message
+
+                getLobbyState (data) =>
 
                     # let the user know the current crack
                     @socket.emit "lobby:status", data
-
-                    # let everyone else in the room know it too
-                    @socket.emitRoom "lobby", "lobby:user:join", @socket.user
 
                     # need this last otherwise socket will get both messages
                     @socket.join "lobby" # perhaps...
@@ -34,3 +32,18 @@ class LobbyController extends BaseController
             @socket.emitRoom "lobby", "lobby:user:leave", @socket.user
 
 module.exports = LobbyController
+
+getLobbyState = (callback)->
+    # we have to get the games...
+    GameManager.findAllActive (games) =>
+        # and, well, we need to get the list of lobby users
+        UserManager.findAllLobby (users) =>
+            # and we need some chat info...
+            ChatManager.getMessages 10, (messages) =>
+
+                data =
+                    users: users
+                    games: games
+                    messages: messages
+
+                callback data

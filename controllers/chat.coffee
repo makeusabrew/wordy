@@ -1,18 +1,10 @@
 BaseController = require "./base"
 
-messages = []
+ChatManager    = require "../managers/chat"
 
 class ChatController extends BaseController
     message: (text) ->
-        message =
-            user:
-                username: @socket.user.username
-                id: @socket.getUserId()
-            text: text
-            created: new Date
-
-        messages.push message
-
-        @socket.emitAll "chat:message", message
+        ChatManager.addMessageFromUser @socket.user, text, (message) =>
+            @socket.emitAll "chat:message", message
 
 module.exports = ChatController

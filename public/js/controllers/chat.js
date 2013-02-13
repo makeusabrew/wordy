@@ -14,4 +14,8 @@ function ChatController($scope, client) {
     client.on("chat:message", function(message) {
         $scope.messages.push(message);
     });
+
+    client.on("lobby:status", function(data) {
+        $scope.messages = data.messages;
+    });
 }
