@@ -8,7 +8,7 @@ class GameController extends BaseController
         GameManager.findGame gameId, (game) =>
 
             # @todo either move all temporary state to in-memory like this, or keep it in redis
-            @socket.gameId = gameId
+            @socket.game = game
 
             GameManager.addUserToGame @socket.user, game, =>
 
@@ -27,12 +27,11 @@ class GameController extends BaseController
                     @socket.emitAll "game:start", game.toObject() if started
 
     submitWord: (text) ->
-        # @todo this should take proper objects, not IDs...
-        GameManager.claimWord @socket.gameId, @socket.getUserId(), text, (result) =>
+        GameManager.claimWord @socket.game, @socket.user, text, (result) =>
             return if not result
 
             # well done! let everyone know
             # the result object is safe to pass straight through
-            @socket.emitRoom "game:#{@socket.gameId}", "game:word:claim", result
+            @socket.emitRoom "game:#{@socket.game.id}", "game:word:claim", result
 
 module.exports = GameController

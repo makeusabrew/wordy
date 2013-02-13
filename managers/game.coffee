@@ -54,15 +54,12 @@ GameManager =
 
         callback games[id]
 
-    claimWord: (id, userId, text, callback) ->
-        @findGame id, (game) =>
-            return callback null if game is null
-
-            # note: we give findWord text, we get an object back
-            # not sure we really need two methods here... why can't
-            # claimWord just take a text input and be done with it?
-            game.findWord text, (word, index) =>
-                game.claimWord userId, index, callback if word
+    claimWord: (game, user, text, callback) ->
+        # note: we give findWord text, we get an object back
+        # not sure we really need two methods here... why can't
+        # claimWord just take a text input and be done with it?
+        game.findWord text, (word, index) =>
+            game.claimWord user.id, index, callback if word
 
     canStartGame: (game, callback) ->
         if game.users.length >= game.minPlayers and not game.started
