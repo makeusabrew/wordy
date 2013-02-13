@@ -6,3 +6,7 @@ svg {
     font-family:"Courier New";
     font-size:13px;
 }
+
+.text-input--full {
+    width:100%;
+}

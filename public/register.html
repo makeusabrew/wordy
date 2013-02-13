@@ -4,17 +4,18 @@
     <ul class=form-fields>
         <li>
             <label for=username>Username:</label>
-            <input type=text ng-model="regUser.username" required />
+            <input type=text ng-model="regUser.username" required class="text-input" />
         </li>
 
         <li>
             <label for=email>Email:</label>
-            <input type=email ng-model="regUser.email" required />
+            <input type=email ng-model="regUser.email" required class="text-input" />
+            <span class="extra-help">We only need this to show your <a href=#>gravatar</a></span>
         </li>
 
         <li>
             <label for=password>Password:</label>
-            <input type=password ng-model="regUser.password" required />
+            <input type=password ng-model="regUser.password" required class="text-input" />
         </li>
 
         <li>
