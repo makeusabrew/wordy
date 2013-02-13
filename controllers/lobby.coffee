@@ -26,7 +26,7 @@ class LobbyController extends BaseController
                     @socket.join "lobby" # perhaps...
 
                     GameManager.checkSpawnNewGame (game) =>
-                        @socket.emitAll "game:spawn", game if game
+                        @socket.emitAll "game:spawn", game.toObject() if game
 
     leave: ->
         UserManager.removeFromLobby @socket.user, =>

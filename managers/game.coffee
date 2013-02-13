@@ -22,8 +22,6 @@ GameManager =
         callback flat
 
     addUserToGame: (user, game, callback) ->
-        if not game.users
-            game.users = []
 
         game.users.push user
 
@@ -46,10 +44,10 @@ GameManager =
                     width: 10
                     height: 10
 
-                (new GameMapper).create data, (game) =>
-                    @addActive new Game(game), =>
-                        # @todo this is inconsistent; it just returns a simple object instead of a Game class
-                        callback game
+                (new GameMapper).create data, (object) =>
+                    # augment the game into a proper model
+                    game = new Game(object)
+                    @addActive game, => callback game
 
     findGame: (id, callback) ->
         return callback null if not games[id]
