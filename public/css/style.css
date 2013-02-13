@@ -1,3 +1,9 @@
+html {
+    font-family:Helvetica;
+    font-size:1em;
+    line-height:1.5;
+}
+
 body {
     padding-top:24px;
 }
@@ -7,11 +13,15 @@ body {
     margin:0 auto;
 }
 
-.game-svg .word {
+.word {
     font-family:"Courier New";
     font-size:13px;
 }
 
 .text-input--full {
     width:100%;
+}
+
+.list--plain {
+    list-style:none;
 }

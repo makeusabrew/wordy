@@ -1,13 +1,18 @@
 <div ng-show="game" class=gw>
-    <div class="g   two-thirds">
-        Welcome to game ID {{game.id}}
+    <div class="g   three-fifths">
+        Game #{{game.id}}
         Players: {{players.length}}/{{game.maxPlayers}}
         Tiles remaining: {{slots.available}}/{{slots.total}}
 
         <div class="game-svg"></div>
+
+        <form ng-submit="submitWord()">
+            <label for="word">Type any available word in the grid:</label>
+            <input id="word" ng-model="word" type="text" placeholder="" class="text-input text-input--full" />
+        </form>
     </div>
 
-    <div class="g   one-third">
+    <div class="g   two-fifths">
         <h2>Players</h2>
         <ol>
             <li ng-repeat="player in players | orderBy:playerScore:true">
@@ -17,7 +22,7 @@
         </ol>
 
         <h2>Notifications</h2>
-        <ul>
+        <ul class="list list--plain">
             <li ng-repeat="message in messages">
                 <img ng-src="{{playerAvatar(message.user)}}" width="20" height="20" />
                 claimed
@@ -26,12 +31,5 @@
                 <span ng-show="message.combo > 1">(&times;{{message.combo}})</span>
             </li>
         </ul>
-    </div>
-
-    <div class="g   two-thirds">
-        <form ng-submit="submitWord()">
-            <label for="word">Type any available word in the grid:</label>
-            <input id="word" ng-model="word" type="text" placeholder="" class="text-input text-input--full" />
-        </form>
     </div>
 </div>
