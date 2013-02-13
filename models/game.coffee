@@ -18,6 +18,7 @@ class Game
 
         @lastWordUserId = 0
         @wordCombo = 1
+        @users = []
 
     fromObject: (object) ->
         @[key] = object[key] for key in @properties
@@ -27,6 +28,7 @@ class Game
 
         object[key] = @[key] for key in @properties
 
+        # transient, non persisted stuff
         object.users = @users
 
         return object
