@@ -37,6 +37,7 @@ class Game
         require("../managers/game").io.sockets.in("game:#{@id}").emit msg, data
 
     start: ->
+        @started = new Date
         @queueWord()
 
     queueWord: ->
