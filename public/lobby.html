@@ -5,7 +5,9 @@ Hi {{user.username}}
         <h2>Chat</h2>
         <ul>
             <li ng-repeat="message in messages">
-                {{message}}
+                <time>{{message.created}}</time>
+                <span>{{message.user.username}}:</span>
+                <span>{{message.text}}</span>
             </li>
         </ul>
         <form ng-submit="send()">
