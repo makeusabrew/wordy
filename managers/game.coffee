@@ -59,7 +59,9 @@ GameManager =
         # not sure we really need two methods here... why can't
         # claimWord just take a text input and be done with it?
         game.findWord text, (word, index) =>
-            game.claimWord user.id, index, callback if word
+            return game.claimWord user.id, index, callback if word
+
+            callback null
 
     canStartGame: (game, callback) ->
         if game.users.length >= game.minPlayers and not game.started
