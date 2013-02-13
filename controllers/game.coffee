@@ -26,14 +26,13 @@ class GameController extends BaseController
                     # this message below is currently ignored client side...
                     @socket.emitAll "game:start", game.toObject() if started
 
-    submitWord: (word) ->
-        GameManager.claimWord @socket.gameId, @socket.getUserId(), word, (wordId, score) =>
-            if score
-                # well done! let everyone know
-                data =
-                    wordId: wordId
-                    score: score
-                    userId: @socket.getUserId()
+    submitWord: (text) ->
+        # @todo this should take proper objects, not IDs...
+        GameManager.claimWord @socket.gameId, @socket.getUserId(), text, (result) =>
+            return if not result
 
-                @socket.emitRoom "game:#{@socket.gameId}", "game:word:claim", data
+            # well done! let everyone know
+            # the result object is safe to pass straight through
+            @socket.emitRoom "game:#{@socket.gameId}", "game:word:claim", result
+
 module.exports = GameController

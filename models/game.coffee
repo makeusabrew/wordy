@@ -101,7 +101,13 @@ class Game
 
         score *= @wordCombo
 
-        callback @words[index].id, score
+        result =
+            points: score
+            combo: @wordCombo
+            wordId: @words[index].id
+            userId: userId
+
+        callback result
 
     dirtyGrid: (word) ->
         v = @getVector word

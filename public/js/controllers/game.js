@@ -115,14 +115,11 @@ function GameController($scope, $routeParams, client, d3) {
         $scope.players.push(data);
     });
 
-    client.on("game:message", function(message) {
-        $scope.messages.push(message);
-    });
-
     client.on("game:word:claim", function(data) {
         var block = svg.select("g[data-id='"+data.wordId+"']");
 
         var player = getPlayer(data.userId);
+        var word = getWord(data.wordId);
 
         var rect = block.select("rect");
         var xOff = 0,
@@ -160,26 +157,42 @@ function GameController($scope, $routeParams, client, d3) {
             .attr("opacity", 0.65);
         }
 
+        // @todo store scores against proper users, not in a separate array
         var userId = data.userId;
         if (typeof $scope.scores[userId] === 'undefined') {
             $scope.scores[userId] = 0;
         }
-        $scope.scores[userId] += data.score;
+        $scope.scores[userId] += data.points;
 
-        $scope.messages.push("Player ["+data.userId+"] claimed word ["+data.wordId+"] for score ["+data.score+"]");
+        var msg = {
+            user: player,
+            word: word,
+            points: data.points,
+            combo: data.combo
+        };
+
+        $scope.messages.push(msg);
     });
 
     $scope.playerAvatar = function(player) {
         return "http://www.gravatar.com/avatar/"+player.emailHash+"?d=retro";
     };
 
-    function getPlayer(id) {
-        var i = $scope.players.length;
+    function getObjectById(id, property) {
+        var i = $scope[property].length;
         while (i--) {
-            var player = $scope.players[i];
-            if (player.id == id) {
-                return player;
+            var object = $scope[property][i];
+            if (object.id == id) {
+                return object;
             }
         }
+    }
+
+    function getPlayer(id) {
+        return getObjectById(id, 'players');
+    }
+
+    function getWord(id) {
+        return getObjectById(id, 'words');
     }
 }

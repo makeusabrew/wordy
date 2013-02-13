@@ -19,7 +19,11 @@
         <h2>Notifications</h2>
         <ul>
             <li ng-repeat="message in messages">
-                {{message}}
+                <img ng-src="{{playerAvatar(message.user)}}" width="20" height="20" />
+                claimed
+                &lsquo;{{message.word.text}}&rsquo;
+                for {{message.points}} points
+                <span ng-show="message.combo > 1">(&times;{{message.combo}})</span>
             </li>
         </ul>
     </div>
