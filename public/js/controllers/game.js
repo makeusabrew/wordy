@@ -28,26 +28,26 @@ function GameController($scope, $routeParams, client, d3) {
     var svg = d3
     .select(".game-svg")
     .append("svg")
-    .attr("width", width)
-    .attr("height", height);
+    .attr("width", width+1)
+    .attr("height", height+1);
 
     var blockSize = 50;
 
-    for (var i = blockSize+.5, j = width; i < j; i += blockSize) {
+    for (var i = 0, j = width; i <= j; i += blockSize) {
         svg.append("line")
-        .attr("x1", i)
-        .attr("x2", i)
+        .attr("x1", i+0.5)
+        .attr("x2", i+0.5)
         .attr("y1", 0)
         .attr("y2", height)
         .attr("stroke", "grey");
     }
 
-    for (var i = blockSize+.5, j = height; i < j; i += blockSize) {
+    for (var i = 0, j = height; i <= j; i += blockSize) {
         svg.append("line")
         .attr("x1", 0)
         .attr("x2", width)
-        .attr("y1", i)
-        .attr("y2", i)
+        .attr("y1", i+0.5)
+        .attr("y2", i+0.5)
         .attr("stroke", "grey");
     }
 

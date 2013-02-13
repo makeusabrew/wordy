@@ -8,16 +8,15 @@
     </div>
 
     <div class="g   one-third">
-        <ul>
+        <h2>Players</h2>
+        <ol>
             <li ng-repeat="player in players | orderBy:playerScore:true">
                 <img ng-src="{{playerAvatar(player)}}" width="32" height="32" />
                 {{player.username}} - {{playerScore(player)}}
             </li>
-        </ul>
-    </div>
+        </ol>
 
-    <!-- ticker messages; game notifications basically -->
-    <div class="g   two-thirds">
+        <h2>Notifications</h2>
         <ul>
             <li ng-repeat="message in messages">
                 {{message}}
@@ -25,9 +24,10 @@
         </ul>
     </div>
 
-    <div class="g   one-third">
+    <div class="g   two-thirds">
         <form ng-submit="submitWord()">
-            <input ng-model="word" type="text" placeholder="Type a word..." />
+            <label for="word">Type any available word in the grid:</label>
+            <input id="word" ng-model="word" type="text" placeholder="" class="text-input text-input--full" />
         </form>
     </div>
 </div>

@@ -1,5 +1,10 @@
-svg {
-    border:1px solid #aaa;
+body {
+    padding-top:24px;
+}
+
+.wrapper {
+    width:960px;
+    margin:0 auto;
 }
 
 .game-svg .word {
