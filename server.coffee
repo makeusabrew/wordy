@@ -8,6 +8,7 @@ Config      = require "./lib/config"
 Redis       = require "./lib/redis"
 EventBus    = require "./lib/event_bus"
 GameManager = require "./managers/game"
+WordList    = require "./models/word_list"
 
 sessionStore = new express.session.MemoryStore()
 
@@ -81,3 +82,6 @@ Redis.client.del "users:lobby"
 Redis.client.del "games:active"
 
 GameManager.io = io
+
+WordList.loadDictWords ->
+    console.log "words loaded"
