@@ -154,7 +154,7 @@ function GameController($scope, $routeParams, client, d3) {
             .attr("height", blockSize)
             .attr("opacity", 0)
             .transition()
-            .attr("opacity", 0.65);
+            .attr("opacity", 0.7);
         }
 
         // @todo store scores against proper users, not in a separate array
