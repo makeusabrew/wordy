@@ -1,16 +1,20 @@
 fs = require "fs"
 
-words = []
+words = {}
 
 module.exports =
-    getRandomWord: ->
-        index = Math.floor(Math.random()*words.length)
-        return words[index]
+
+    getWordUpToLength: (max) ->
+        pool = []
+        pool = pool.concat list for len, list of words when len <= max
+
+        index = Math.floor(Math.random()*pool.length)
+        return pool[index]
 
     loadDictWords: (callback) ->
         stream = fs.createReadStream "/usr/share/dict/words"
 
-        words = []
+        words = {}
         stream.on "data", (data) =>
             data = data.toString "utf8"
 
@@ -20,7 +24,10 @@ module.exports =
                         word.length > 2 and
                         word.toUpperCase() isnt word
 
-                    words.push word.toLowerCase()
+                    len = word.length
+
+                    words[len] = [] if not words[len]
+                    words[len].push word.toLowerCase()
 
         stream.on "end", =>
             callback true
