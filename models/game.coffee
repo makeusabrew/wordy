@@ -11,14 +11,31 @@ class Game
         @words = []
         @wordId = 1
         @grid = {}
+        @gridList = {}
+        @wordOrder = []
+        @wordIndex = 0
+        @slotsTaken = 0
+
         for x in [0..@width-1]
             @grid[x] = {}
             for y in [0..@height-1]
                 @grid[x][y] = 0
 
+                offset = (x*@width)+y
+                @wordOrder.push(offset)
+                @gridList[offset] =
+                    x: x
+                    y: y
+                    free: true
+                    sizes: [1, 1, 1, 1]
+
         @lastWordUserId = 0
         @wordCombo = 1
         @users = []
+
+        @wordOrder.sort -> if Math.random() >= 0.5 then -1 else 1
+
+        @calculateGridAvailibility()
 
     fromObject: (object) ->
         @[key] = object[key] for key in @properties
@@ -67,6 +84,7 @@ class Game
                 @words.push word
 
                 @dirtyGrid word
+                @calculateGridAvailibility()
 
                 data.push word
 
@@ -109,90 +127,116 @@ class Game
         callback result
 
     dirtyGrid: (word) ->
-        v = @getVector word
+        vector = @getVector word
 
-        for p in [v.start..v.end]
-            # horizontal
-            if word.rotation % 2 == 0
-                x = p
-                y = word.y
-            else
-                x = word.x
-                y = p
-            @grid[x][y] = word.id
+        for v in vector
+            @grid[v.x][v.y] = word.id
+            @slotsTaken += 1
 
-    gridTaken: (word) ->
-        v = @getVector word
+    getVector: (object) ->
+        vector = []
 
-        # can't spawn off the grid
-        return true if @offGrid v
-
-        for p in [v.start..v.end]
-            # horizontal
-            if word.rotation % 2 == 0
-                x = p
-                y = word.y
-            else
-                x = word.x
-                y = p
-            return true if @grid[x][y] > 0
-
-        return false
-
-    getVector: (word) ->
-        vector =
-            rotation: word.rotation
-
-        if word.rotation % 2 == 0
-            start = word.x
+        if object.rotation % 2 is 0
+            start = object.x
         else
-            start = word.y
+            start = object.y
 
-        switch word.rotation
+        switch object.rotation
             # right and down are considered positive
             when 0, 1
-                end = start + (word.size - 1)
+                end = Math.min(start + (object.size - 1), @width-1)
             # left and up are considered negative
             when 2, 3
-                end = start - (word.size - 1)
+                end = Math.max(start - (object.size - 1), 0)
 
-        vector.start = start
-        vector.end = end
+        for p in [start..end]
+            v = {}
+            if object.rotation % 2 is 0
+                v.x = p
+                v.y = object.y
+            else
+                v.x = object.x
+                v.y = p
+
+            vector.push v
 
         return vector
 
-    offGrid: (vector) ->
-        # horizontal; only care about X
-        if vector.rotation % 2 is 0
-            value = @width
-        else
-            value = @height
+    getRandomWordAndPosition: ->
+        # right, what's our ideal next grid slot?
+        return null if @slotsTaken is @width*@height
 
-        return vector.end < 0 or vector.end >= value
+        while @wordIndex < @wordOrder.length
+            slot = @gridList[@wordOrder[@wordIndex]]
+            break if slot.free
 
-    getRandomWordAndPosition: (attempts = 20) ->
-        x = Math.floor(Math.random()*@width)
-        y = Math.floor(Math.random()*@height)
+            @wordIndex += 1
 
-        text = WordList.getRandomWord()
+        # figure out the max possible word length from here
+        # regardless of direction
+        max = 0
+        for size in slot.sizes
+            if size > max
+                max = size
 
         # @todo: un-hardcode 5 below - it's the amount of letters we can fit per tile
+        max *= 5
+
+        # get a word UP TO max length
+        text = WordList.getWordUpToLength(max)
         size = Math.ceil(text.length / 5)
 
+        start = Math.floor(Math.random()*4)
+        end = start + 3
+        dir = 0
+        for d in [start..end]
+            i = d % 4
+            if slot.sizes[i] >= size
+                dir = i
+                break
+
+        @wordIndex += 1
+
         word =
-            x: x
-            y: y
+            x: slot.x
+            y: slot.y
             text: text
             size: size
-            rotation: Math.floor(Math.random()*4)
+            rotation: dir
 
-        return word if not @gridTaken word
+        return word
 
-        if attempts
-            return @getRandomWordAndPosition(attempts - 1)
-        else
-            console.log "panic - no slots left"
-            return null
+    getSlotVector: (slot) ->
+
+    calculateGridAvailibility: ->
+        @calculateSlotAvailibility slot for key, slot of @gridList
+
+    calculateSlotAvailibility: (slot) ->
+
+        if @grid[slot.x][slot.y] > 0
+            slot.free = false
+            return
+
+        @calculateSlotSizes slot, dir for dir in [0..3]
+
+    calculateSlotSizes: (slot, dir) ->
+        object =
+            x: slot.x
+            y: slot.y
+            rotation: dir
+            size: @width
+
+        vector = @getVector object
+
+        free = 0
+
+        for v in vector
+            if @grid[v.x][v.y] is 0
+                free += 1
+            else
+                break
+
+        slot.sizes[dir] = free
 
 module.exports = Game
 
