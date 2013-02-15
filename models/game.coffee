@@ -69,7 +69,7 @@ class Game
     spawnWord: ->
 
         data = []
-        numWords = 1+ Math.floor(Math.random()*3)
+        numWords = 1 + Math.floor(Math.random()*3)
 
         for x in [1..numWords]
             word = @getRandomWordAndPosition()
@@ -129,9 +129,9 @@ class Game
     dirtyGrid: (word) ->
         vector = @getVector word
 
-        for v in vector
-            @grid[v.x][v.y] = word.id
-            @slotsTaken += 1
+        @grid[v.x][v.y] = word.id for v in vector
+
+        @slotsTaken += vector.length
 
     getVector: (object) ->
         vector = []
