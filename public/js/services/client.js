@@ -28,5 +28,9 @@ angular.module("client", [])
         socket.emit(msg, data);
     };
 
+    that.removeListeners = function() {
+        socket.removeAllListeners();
+    };
+
     return that;
 });

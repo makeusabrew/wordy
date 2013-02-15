@@ -43,4 +43,9 @@ angular
         $location.path("/login");
 
     });
+
+    $rootScope.$on("$routeChangeStart", function(next, current) {
+        // we have to make sure we scrap any client.on("foo") listeners
+        client.removeListeners();
+    });
 });
