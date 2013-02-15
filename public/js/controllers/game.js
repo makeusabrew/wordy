@@ -5,7 +5,6 @@ function GameController($scope, $routeParams, $location, client, d3) {
     $scope.messages = [];
     $scope.word = "";
     $scope.words = [];
-    $scope.scores = {};
     $scope.slots = {};
 
     $scope.submitWord = function() {
@@ -14,7 +13,7 @@ function GameController($scope, $routeParams, $location, client, d3) {
     };
 
     $scope.playerScore = function(player) {
-        return $scope.scores[player.id] || 0;
+        return player.score;
     };
 
     /**
@@ -157,12 +156,7 @@ function GameController($scope, $routeParams, $location, client, d3) {
             .attr("opacity", 0.7);
         }
 
-        // @todo store scores against proper users, not in a separate array
-        var userId = data.userId;
-        if (typeof $scope.scores[userId] === 'undefined') {
-            $scope.scores[userId] = 0;
-        }
-        $scope.scores[userId] += data.points;
+        player.score += data.points;
 
         var msg = {
             user: player,

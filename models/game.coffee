@@ -87,7 +87,6 @@ class Game
                 word.claimed = false
                 word.userId = null
                 word.id = @wordId
-                word.flipped = false
 
                 @wordId += 1
                 @words.push word
@@ -106,36 +105,42 @@ class Game
         # push the queue requests to the client(s)
         @emitRoom "game:word:spawn", data
 
-    findWord: (input, callback) ->
+    findWord: (text) ->
         for word, i in @words when word.claimed is false
-            if word.text.toLowerCase() is input.toLowerCase()
-                return callback word, i
+            return word if word.text.toLowerCase() is text.toLowerCase()
 
-        callback false, -1
+        return null
     
-    claimWord: (userId, index, callback) ->
-        @words[index].claimed = true
-        @words[index].userId = userId
+    claimWord: (user, text) ->
+        word = @findWord text, (word) ->
 
-        @slotsClaimed += @words[index].size
+        return null if not word
 
-        score = @words[index].text.length
+        word.claimed = true
+        word.userId = user.id
 
-        if @lastWordUserId is userId
+        @slotsClaimed += word.size
+
+        score = word.text.length
+
+        if @lastWordUserId is user.id
             @wordCombo += 1 if @wordCombo < 5
         else
-            @lastWordUserId = userId
+            @lastWordUserId = user.id
             @wordCombo = 1
 
         score *= @wordCombo
 
+        # @todo can we just augment the word here?
+        # that way we can easily store relevant stuff
+        # in one place
         result =
             points: score
             combo: @wordCombo
-            wordId: @words[index].id
-            userId: userId
+            wordId: word.id
+            userId: user.id
 
-        callback result
+        return result
 
     dirtyGrid: (word) ->
         vector = @getVector word
@@ -252,6 +257,14 @@ class Game
 
     allSlotsClaimed: ->
         return @slotsClaimed is @width*@height
+
+    addUser: (user) ->
+        # well, a new user can't have any points yet
+        # need to think about the ramifications of this - given that
+        # ultimately this probably changes the @socket.user object,
+        # probably only relevant in edge cases of multiple games at once etc
+        user.score = 0
+        @users.push user
 
 module.exports = Game
 

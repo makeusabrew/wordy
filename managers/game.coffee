@@ -23,7 +23,7 @@ GameManager =
 
     addUserToGame: (user, game, callback) ->
 
-        game.users.push user
+        game.addUser user
 
         callback()
 
@@ -55,13 +55,7 @@ GameManager =
         callback games[id]
 
     claimWord: (game, user, text, callback) ->
-        # note: we give findWord text, we get an object back
-        # not sure we really need two methods here... why can't
-        # claimWord just take a text input and be done with it?
-        game.findWord text, (word, index) =>
-            return game.claimWord user.id, index, callback if word
-
-            callback null
+        callback game.claimWord user, text
 
     canStartGame: (game, callback) ->
         if game.users.length >= game.minPlayers and not game.started
