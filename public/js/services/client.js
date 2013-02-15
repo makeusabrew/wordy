@@ -16,6 +16,7 @@ angular.module("client", [])
     that.on = function(msg, callback) {
         socket.on(msg, function() {
             var args = arguments;
+            console.log("←", msg, args);
             $rootScope.$apply(function() {
                 callback.apply(socket, args);
             });
@@ -23,7 +24,7 @@ angular.module("client", [])
     };
 
     that.emit = function(msg, data) {
-        console.log(msg, data);
+        console.log("→", msg, data);
         socket.emit(msg, data);
     };
 

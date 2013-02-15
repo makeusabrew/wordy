@@ -47,7 +47,7 @@ class Game
         object[key] = @[key] for key in @properties
 
         # transient, non persisted stuff
-        object.users = @users
+        object.users = (user.toObject() for user in @users)
 
         return object
 
@@ -263,7 +263,7 @@ class Game
         # need to think about the ramifications of this - given that
         # ultimately this probably changes the @socket.user object,
         # probably only relevant in edge cases of multiple games at once etc
-        user.score = 0
+        user.gameScore = 0
         @users.push user
 
 module.exports = Game

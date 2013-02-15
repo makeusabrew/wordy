@@ -1,4 +1,4 @@
-function GameController($scope, $routeParams, $location, client, d3) {
+function GameController($rootScope, $scope, $routeParams, $location, client, d3) {
 
     $scope.game = null;
     $scope.players = [];
@@ -12,8 +12,10 @@ function GameController($scope, $routeParams, $location, client, d3) {
         $scope.word = "";
     };
 
-    $scope.playerScore = function(player) {
-        return player.score;
+    $scope.quit = function() {
+        if (confirm("Are you sure?")) {
+            $location.path("/lobby");
+        }
     };
 
     /**
@@ -146,7 +148,7 @@ function GameController($scope, $routeParams, $location, client, d3) {
             // however, having to work out all the offsets and
             // stuff extra data against the block is not ideal...
             svg.append("image")
-            .attr("xlink:href", $scope.playerAvatar(player))
+            .attr("xlink:href", $rootScope.getAvatar(player))
             .attr("x", +block.attr("data-x")+(xOff*i))
             .attr("y", +block.attr("data-y")+(yOff*i))
             .attr("width", blockSize)

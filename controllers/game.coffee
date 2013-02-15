@@ -18,7 +18,7 @@ class GameController extends BaseController
                 # and also whether a game has started or not too
                 @socket.emit "game:status", game.toObject()
 
-                @socket.emitRoom "game:#{gameId}", "game:user:join", @socket.user
+                @socket.emitRoom "game:#{gameId}", "game:user:join", @socket.user.toObject()
 
                 @socket.join "game:#{gameId}"
 

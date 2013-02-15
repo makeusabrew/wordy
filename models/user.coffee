@@ -6,7 +6,7 @@ class User
     ]
 
     constructor: ->
-        return
+        @gameScore = 0
 
     isAuthed: ->
         return !!@id
@@ -22,6 +22,7 @@ class User
         delete object.password
 
         object.emailHash = crypto.createHash("md5").update(@email.toLowerCase().trim()).digest("hex")
+        object.score = @gameScore
 
         return object
 

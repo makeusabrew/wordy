@@ -3,6 +3,7 @@
         Game #{{game.id}}
         Players: {{players.length}}/{{game.maxPlayers}}
         Tiles remaining: {{slots.available}}/{{slots.total}}
+        <a href="" ng-click="quit()">Quit to lobby</a>
 
         <div class="game-svg"></div>
 
@@ -15,16 +16,16 @@
     <div class="g   two-fifths">
         <h2>Players</h2>
         <ol>
-            <li ng-repeat="player in players | orderBy:playerScore:true">
+            <li ng-repeat="player in players | orderBy:player.score:true">
                 <img ng-src="{{getAvatar(player)}}" width="32" height="32" />
-                {{player.username}} - {{playerScore(player)}}
+                {{player.username}} &ndash; {{player.score}}
             </li>
         </ol>
 
         <h2>Notifications</h2>
         <ul class="secret-list">
             <li ng-repeat="message in messages">
-                <img ng-src="{{playerAvatar(message.user)}}" width="20" height="20" />
+                <img ng-src="{{getAvatar(message.user)}}" width="20" height="20" />
                 &lsquo;{{message.word.text}}&rsquo;
                 &ndash; {{message.points}} points
                 <span ng-show="message.combo > 1">(&times;{{message.combo}})</span>

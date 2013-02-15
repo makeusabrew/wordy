@@ -5,7 +5,8 @@ angular
     $locationProvider.html5Mode(true);
 
     $routeProvider.when("/lobby", {
-        templateUrl: "/lobby.html"
+        templateUrl: "/lobby.html",
+        controller: LobbyController
     });
 
     $routeProvider.when("/login", {
