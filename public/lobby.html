@@ -1,5 +1,7 @@
 <h1>Welcome to the lobby, {{user.username}}!</h1>
+
 <div ng-controller="LobbyController" class=gw>
+
     <div ng-controller="ChatController" class="g    three-fifths">
         <div class="chat">
             <ul class="chat__container  secret-list">
@@ -17,7 +19,7 @@
         </form>
 
         <div class="player-list">
-            <h2 class="gamma">Who&rsquo;s here?</h2>
+            <h2 class="gamma">Who&rsquo;s here? ({{users.length}} user<span ng-show="users.length != 1">s</span>)</h2>
             <ul class="player-list__list secret-list">
                 <li ng-repeat="user in users">
                     <img ng-src="{{getAvatar(user)}}" alt="" title="{{user.username}}" class="player-list__avatar" width="32" height="32" />
@@ -28,7 +30,7 @@
 
     <div class="g   two-fifths">
         <h2 class="gamma">Active Games</h2>
-        <ul>
+        <ul class="secret-list">
             <li ng-repeat="game in games">
                 #{{game.id}}
                 Players: {{game.users.length}} / {{game.maxPlayers}}
