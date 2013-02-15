@@ -7,7 +7,6 @@ class Game
 
     constructor: (object) ->
         @fromObject object
-        @timer = null
         @words = []
         @wordId = 1
         @grid = {}
@@ -15,6 +14,7 @@ class Game
         @wordOrder = []
         @wordIndex = 0
         @slotsTaken = 0
+        @slotsClaimed = 0
 
         for x in [0..@width-1]
             @grid[x] = {}
@@ -33,6 +33,7 @@ class Game
         @wordCombo = 1
         @users = []
 
+        # this is a crude implementation of shuffle()... but seems to work well enough
         @wordOrder.sort -> if Math.random() >= 0.5 then -1 else 1
 
         @calculateGridAvailibility()
@@ -57,13 +58,21 @@ class Game
         @started = new Date
         @queueWord getRandomDelay(3000, 5000)
 
+    finish: ->
+        @finished = new Date
+
     queueWord: (delay) ->
 
-        clearTimeout @timer
-
-        @timer = setTimeout =>
+        setTimeout =>
             @spawnWord()
-            @queueWord getRandomDelay()
+
+            # still not keen on the game handling this logic but can't see
+            # how to squeeze it into a controller which doesn't exist
+            if @slotsTaken is @width*@height
+                # @todo make this something a bit better, obviously
+                @emitRoom "game:notification", "The grid is full!"
+            else
+                @queueWord getRandomDelay()
         , delay
 
     spawnWord: ->
@@ -107,6 +116,8 @@ class Game
     claimWord: (userId, index, callback) ->
         @words[index].claimed = true
         @words[index].userId = userId
+
+        @slotsClaimed += @words[index].size
 
         score = @words[index].text.length
 
@@ -238,6 +249,9 @@ class Game
         for d in [start..start+3]
             direction = d % 4
             return direction if slot.sizes[direction] >= size
+
+    allSlotsClaimed: ->
+        return @slotsClaimed is @width*@height
 
 module.exports = Game
 

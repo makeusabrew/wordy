@@ -1,4 +1,4 @@
-function GameController($scope, $routeParams, client, d3) {
+function GameController($scope, $routeParams, $location, client, d3) {
 
     $scope.game = null;
     $scope.players = [];
@@ -172,6 +172,18 @@ function GameController($scope, $routeParams, client, d3) {
         };
 
         $scope.messages.push(msg);
+    });
+
+    client.on("game:notification", function(data) {
+        // ???
+        console.log(data);
+    });
+
+    client.on("game:over", function() {
+        // ???
+        alert("Game over!");
+
+        $location.path("/lobby");
     });
 
     $scope.playerAvatar = function(player) {

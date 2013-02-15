@@ -34,4 +34,10 @@ class GameController extends BaseController
             # the result object is safe to pass straight through
             @socket.emitRoom "game:#{@socket.game.id}", "game:word:claim", result
 
+            GameManager.allSlotsClaimed @socket.game, (claimed) =>
+                return if not claimed
+
+                GameManager.finishGame @socket.game, =>
+                    @socket.emitRoom "game:#{@socket.game.id}", "game:over"
+
 module.exports = GameController

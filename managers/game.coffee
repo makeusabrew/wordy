@@ -71,4 +71,13 @@ GameManager =
 
         callback false
 
+    allSlotsClaimed: (game, callback) ->
+        callback game.allSlotsClaimed()
+
+    finishGame: (game, callback) ->
+        callback false if game.finished
+
+        game.finish()
+        callback true
+
 module.exports = GameManager
