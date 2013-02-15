@@ -11,4 +11,7 @@ module.exports =
         # special route triggered when a client leaves (obviously)
         # the point is, we don't explicitly emit this from the client
         # side; socket.io takes care of all that for us
-        socket.on "disconnect", -> authController.disconnect()
+        socket.on "disconnect", ->
+            return if not socket.getUserId()
+
+            authController.disconnect()
