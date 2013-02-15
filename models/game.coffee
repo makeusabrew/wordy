@@ -6,7 +6,7 @@ class Game
     ]
 
     constructor: (object) ->
-        @fromObject object
+        @fromObject object if object
         @words = []
         @wordId = 1
         @grid = {}
