@@ -57,3 +57,11 @@ body {
 .chat__message--invert {
     background:#ccc;
 }
+
+.player-list__list > li {
+    display:inline-block;
+}
+
+.player-list__avatar {
+    margin-right:0.25em;
+}

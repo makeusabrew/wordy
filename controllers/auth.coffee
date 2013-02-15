@@ -26,7 +26,7 @@ class AuthController extends BaseController
         UserManager.removeActive @socket.user, =>
             # we need to emit a pretty global message here since
             # it affects clients in all states
-            @socket.emitAll "user:disconnect", @socket.user
+            @socket.emitAll "user:disconnect", @socket.user.toObject()
 
             ChatManager.addNotification "#{@socket.user.username} has disconnected", (message) =>
                 @socket.emitAll "chat:message", message

@@ -19,6 +19,8 @@ class User
 
         object[key] = @[key] for key in @properties
 
+        delete object.password
+
         object.emailHash = crypto.createHash("md5").update(@email.toLowerCase().trim()).digest("hex")
 
         return object

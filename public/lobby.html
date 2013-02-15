@@ -1,5 +1,5 @@
 <h1>Welcome to the lobby, {{user.username}}!</h1>
-<div class=gw>
+<div ng-controller="LobbyController" class=gw>
     <div ng-controller="ChatController" class="g    three-fifths">
         <div class="chat">
             <ul class="chat__container  secret-list">
@@ -15,9 +15,18 @@
             <img ng-src="{{getAvatar(user)}}" alt="" class="media__img" width="24" height="24" />
             <input id="chat-text" ng-model="text" type="text" class="text-input media__body media__body--input" placeholder="enter your message&hellip;" />
         </form>
+
+        <div class="player-list">
+            <h2 class="gamma">Who&rsquo;s here?</h2>
+            <ul class="player-list__list secret-list">
+                <li ng-repeat="user in users">
+                    <img ng-src="{{getAvatar(user)}}" alt="" title="{{user.username}}" class="player-list__avatar" width="32" height="32" />
+                </li>
+            </ul>
+        </div>
     </div>
 
-    <div ng-controller="LobbyController" class="g   two-fifths">
+    <div class="g   two-fifths">
         <h2 class="gamma">Active Games</h2>
         <ul>
             <li ng-repeat="game in games">

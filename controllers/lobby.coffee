@@ -9,7 +9,7 @@ class LobbyController extends BaseController
         # well, we *have* to join the lobby...
         UserManager.addToLobby @socket.user, =>
             # let everyone else in the room know the new user is present
-            @socket.emitRoom "lobby", "lobby:user:join", @socket.user
+            @socket.emitRoom "lobby", "lobby:user:join", @socket.user.toObject()
 
             # add the chat line
             ChatManager.addNotification "#{@socket.user.username} has entered the lobby", (message) =>
@@ -29,7 +29,7 @@ class LobbyController extends BaseController
     leave: ->
         UserManager.removeFromLobby @socket.user, =>
             @socket.leave "lobby"
-            @socket.emitRoom "lobby", "lobby:user:leave", @socket.user
+            @socket.emitRoom "lobby", "lobby:user:leave", @socket.user.toObject()
 
 module.exports = LobbyController
 
@@ -40,6 +40,9 @@ getLobbyState = (callback)->
         UserManager.findAllLobby (users) =>
             # and we need some chat info...
             ChatManager.getMessages 10, (messages) =>
+
+                # simplify the user classes into friendly objects
+                users = (user.toObject() for user in users)
 
                 data =
                     users: users
