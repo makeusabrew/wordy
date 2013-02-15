@@ -1,5 +1,6 @@
 BaseController = require "./base"
 GameManager    = require "../managers/game"
+ChatManager    = require "../managers/chat"
 
 class GameController extends BaseController
 
@@ -23,8 +24,13 @@ class GameController extends BaseController
 
                 # now the user has joined successfully, should we spawn a new game?
                 GameManager.canStartGame game, (started) =>
-                    # this message below is currently ignored client side...
-                    @socket.emitAll "game:start", game.toObject() if started
+                    return if not started
+
+                    # below is ignored but will probably be re-instated at some point
+                    #@socket.emitAll "game:start", game.toObject() if started
+
+                    ChatManager.addNotification "Game ##{game.id} started!", (message) =>
+                        @socket.emitAll "chat:message", message
 
     submitWord: (text) ->
         GameManager.claimWord @socket.game, @socket.user, text, (result) =>
