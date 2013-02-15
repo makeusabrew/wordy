@@ -175,9 +175,7 @@ class Game
         # figure out the max possible word length from here
         # regardless of direction
         max = 0
-        for size in slot.sizes
-            if size > max
-                max = size
+        max = size if size > max for size in slot.sizes
 
         # @todo: un-hardcode 5 below - it's the amount of letters we can fit per tile
         max *= 5
