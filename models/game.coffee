@@ -178,20 +178,14 @@ class Game
         max = size if size > max for size in slot.sizes
 
         # @todo: un-hardcode 5 below - it's the amount of letters we can fit per tile
-        max *= 5
-
         # get a word UP TO max length
-        text = WordList.getWordUpToLength(max)
+        text = WordList.getWordUpToLength(max * 5)
+
+        # we need to then convert the word length back down to grid size
         size = Math.ceil(text.length / 5)
 
-        start = Math.floor(Math.random()*4)
-        end = start + 3
-        dir = 0
-        for d in [start..end]
-            i = d % 4
-            if slot.sizes[i] >= size
-                dir = i
-                break
+        # pick any direction which can house the word
+        dir = @getSlotDirection slot, size
 
         @wordIndex += 1
 
@@ -235,6 +229,17 @@ class Game
                 break
 
         slot.sizes[dir] = free
+
+    getSlotDirection: (slot, size) ->
+        # @todo this is a bit foul: all we want to do is pick a direction
+        # whose size is >= the grid size of the word we've picked. This could
+        # be any of them, regardless of which was the largest etc
+        # we pick a random start direction (0-3) and loop through - this
+        # ensures we don't bias towards direction 0 (east) etc.
+        start = Math.floor(Math.random()*slot.sizes.length)
+        for d in [start..start+3]
+            direction = d % 4
+            return direction if slot.sizes[direction] >= size
 
 module.exports = Game
 
