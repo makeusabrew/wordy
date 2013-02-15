@@ -55,16 +55,16 @@ class Game
 
     start: ->
         @started = new Date
-        @queueWord()
+        @queueWord getRandomDelay(3000, 5000)
 
-    queueWord: ->
+    queueWord: (delay) ->
 
         clearTimeout @timer
 
         @timer = setTimeout =>
             @spawnWord()
-            @queueWord()
-        , getRandomDelay()
+            @queueWord getRandomDelay()
+        , delay
 
     spawnWord: ->
 
@@ -198,8 +198,6 @@ class Game
 
         return word
 
-    getSlotVector: (slot) ->
-
     calculateGridAvailibility: ->
         @calculateSlotAvailibility slot for key, slot of @gridList
 
@@ -243,4 +241,5 @@ class Game
 
 module.exports = Game
 
-getRandomDelay = (min = 250) -> min + Math.ceil(Math.random()*7000)
+# @todo move to utils or something as getRandom(min, max)
+getRandomDelay = (min = 250, max = 7000) -> min + Math.ceil(Math.random()*(max-min))
