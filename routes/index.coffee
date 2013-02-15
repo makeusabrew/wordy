@@ -5,8 +5,6 @@ module.exports = (io) ->
     # could load global routes here which require an over-arching controller instance?
 
     return (socket) ->
-        # always join a user's own private room based on their session ID
-        socket.join "session:#{socket.handshake.session.sessionID}"
 
         # normal sockets don't quite cut it; let's package them up with the global
         # socket.io object as an added bonus

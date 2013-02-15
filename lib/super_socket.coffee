@@ -2,10 +2,7 @@ User = require "../models/user"
 
 class SuperSocket
     constructor: (@io, @socket) ->
-        @session = @socket.handshake.session
         @user = new User
-
-        @setUser @session.user if @session.user
 
     setUser: (user) ->
         @user.populate user
@@ -13,15 +10,9 @@ class SuperSocket
 
     destroyUser: ->
         @user = null
-        @session.user = null
-        @session.save()
 
     authUser: (user) ->
         @setUser user
-
-        # if we call this we expect to persist the user to session too, for now
-        @session.user = user
-        @session.save()
 
     on: (msg, data) ->
         @socket.on msg, data
