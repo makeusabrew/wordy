@@ -4,7 +4,7 @@
         <div class="chat">
             <ul class="chat__container  secret-list">
                 <li class="chat__message" ng-repeat="message in messages">
-                    <time class="chat__timestamp">{{message.created}}</time>
+                    <time class="chat__timestamp">{{format(message.created)}}</time>
                     <span class="chat__author">{{message.user.username}}</span>
                     <span class="chat__text">{{message.text}}</span>
                 </li>

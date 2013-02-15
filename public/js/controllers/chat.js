@@ -11,6 +11,23 @@ function ChatController($scope, client) {
         $scope.text = "";
     };
 
+    $scope.format = function(dateStr) {
+        var date = new Date(dateStr);
+        var h = date.getHours();
+        var m = date.getMinutes();
+        var s = date.getSeconds();
+        if (h < 10) {
+            h = "0"+h;
+        }
+        if (m < 10) {
+            m = "0"+m;
+        }
+        if (s < 10) {
+            s = "0"+s;
+        }
+        return h+":"+m+":"+s;
+    };
+
     client.on("chat:message", function(message) {
         $scope.messages.push(message);
     });
