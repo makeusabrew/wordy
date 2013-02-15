@@ -1,7 +1,7 @@
 html {
-    font-family:Helvetica;
-    font-size:1em;
-    line-height:1.5;
+    font:1em/1.5 "Helvetica", sans-serif;
+
+    color:rgb(51, 51, 51);
 }
 
 body {
@@ -22,6 +22,37 @@ body {
     width:100%;
 }
 
-.list--plain {
+.secret-list {
     list-style:none;
+    padding:0;
+    margin:0;
+}
+
+.chat {
+    border:1px solid gray;
+    height:20em;
+    overflow:hidden;
+    position:relative;
+}
+
+.chat__container {
+    position:absolute;
+    width:100%;
+    bottom:0;
+}
+
+.chat__author {
+    font-weight:bold;
+}
+
+.chat__author::after {
+    content:":";
+}
+
+.chat__message {
+    padding:0.1em;
+}
+
+.chat__message--invert {
+    background:#ccc;
 }
