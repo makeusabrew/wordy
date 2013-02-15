@@ -5,21 +5,21 @@ angular
     $locationProvider.html5Mode(true);
 
     $routeProvider.when("/lobby", {
-        templateUrl: "lobby.html"
+        templateUrl: "/lobby.html"
     });
 
     $routeProvider.when("/login", {
-        templateUrl: "login.html",
+        templateUrl: "/login.html",
         controller: AuthController
     });
 
     $routeProvider.when("/register", {
-        templateUrl: "register.html",
+        templateUrl: "/register.html",
         controller: AuthController
     });
 
     $routeProvider.when("/game/:id", {
-        templateUrl: "game.html",
+        templateUrl: "/game.html",
         controller: GameController
     });
 
