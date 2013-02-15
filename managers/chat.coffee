@@ -4,7 +4,7 @@ messages = []
 
 ChatManager =
     user:
-        username: "ChatBot"
+        username: "chatbot"
         id: -1
 
     addMessageFromUser: (user, text, callback) ->
