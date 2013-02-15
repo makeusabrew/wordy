@@ -1,5 +1,7 @@
 function LobbyController($rootScope, $scope, $location, client) {
 
+    $rootScope.pageTitle = "The Lobby";
+
     $scope.games = [];
     $scope.users = [];
 

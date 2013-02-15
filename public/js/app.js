@@ -32,6 +32,8 @@ angular
     // and whether the client is connected or not
     $rootScope.connected = false;
 
+    $rootScope.pageTitle = "";
+
     // @todo don't like this much, but we need to access it from all
     // our views - would a service let us do that??
     $rootScope.getAvatar = function(user) {

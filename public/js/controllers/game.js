@@ -1,5 +1,7 @@
 function GameController($rootScope, $scope, $routeParams, $location, client, d3) {
 
+    $rootScope.pageTitle = "Game #"+$routeParams.id;
+
     $scope.game = null;
     $scope.players = [];
     $scope.messages = [];

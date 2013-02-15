@@ -1,5 +1,7 @@
 function AuthController($rootScope, $scope, $location, client) {
 
+    $rootScope.pageTitle = "Login";
+
     // need a private user in case of reg
     $scope.regUser  = {};
 
