@@ -16,7 +16,7 @@
         <h2>Players</h2>
         <ol>
             <li ng-repeat="player in players | orderBy:playerScore:true">
-                <img ng-src="{{playerAvatar(player)}}" width="32" height="32" />
+                <img ng-src="{{getAvatar(player)}}" width="32" height="32" />
                 {{player.username}} - {{playerScore(player)}}
             </li>
         </ol>

@@ -1,6 +1,6 @@
+<h1>Welcome to the lobby, {{user.username}}!</h1>
 <div class=gw>
     <div ng-controller="ChatController" class="g    three-fifths">
-        <h2>Chat</h2>
         <div class="chat">
             <ul class="chat__container  secret-list">
                 <li class="chat__message" ng-repeat="message in messages">
@@ -10,13 +10,15 @@
                 </li>
             </ul>
         </div>
-        <form ng-submit="send()">
-            <input ng-model="text" type="text" class="text-input    text-input--full" />
+
+        <form ng-submit="send()" class="media">
+            <img ng-src="{{getAvatar(user)}}" alt="" class="media__img" width="24" height="24" />
+            <input id="chat-text" ng-model="text" type="text" class="text-input media__body media__body--input" placeholder="enter your message&hellip;" />
         </form>
     </div>
 
     <div ng-controller="LobbyController" class="g   two-fifths">
-        <h2>Active Games</h2>
+        <h2 class="gamma">Active Games</h2>
         <ul>
             <li ng-repeat="game in games">
                 #{{game.id}}

@@ -31,6 +31,12 @@ angular
     // and whether the client is connected or not
     $rootScope.connected = false;
 
+    // @todo don't like this much, but we need to access it from all
+    // our views - would a service let us do that??
+    $rootScope.getAvatar = function(user) {
+        return "http://www.gravatar.com/avatar/"+user.emailHash+"?d=retro";
+    };
+
     client.connect(function() {
         $rootScope.connected = true;
         $location.path("/login");

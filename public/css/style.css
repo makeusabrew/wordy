@@ -33,6 +33,7 @@ body {
     height:20em;
     overflow:hidden;
     position:relative;
+    margin-bottom:1em;
 }
 
 .chat__container {

@@ -180,10 +180,6 @@ function GameController($scope, $routeParams, $location, client, d3) {
         $location.path("/lobby");
     });
 
-    $scope.playerAvatar = function(player) {
-        return "http://www.gravatar.com/avatar/"+player.emailHash+"?d=retro";
-    };
-
     function getObjectById(id, property) {
         var i = $scope[property].length;
         while (i--) {
