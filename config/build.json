@@ -1,11 +1,4 @@
 {
-    "db" : {
-        "host" : "localhost",
-        "name" : "wordy_build",
-        "user" : "wordy",
-        "pass" : "Th2nurepE5U#rupE"
-    },
-
     "server" : {
         "host" : "localhost",
         "port" : 8765
