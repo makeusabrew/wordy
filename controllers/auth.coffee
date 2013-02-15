@@ -34,7 +34,7 @@ class AuthController extends BaseController
     _authUser: (user) ->
         UserManager.addActive user, =>
             @socket.authUser user
-            @socket.emit "auth:login:success", user
+            @socket.emit "auth:login:success", @socket.user.toObject()
 
 
 module.exports = AuthController

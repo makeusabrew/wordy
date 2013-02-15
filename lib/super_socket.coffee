@@ -5,7 +5,7 @@ class SuperSocket
         @user = new User
 
     setUser: (user) ->
-        @user.populate user
+        @user.fromObject user
         @socket.join "user:#{@user.id}"
 
     destroyUser: ->
