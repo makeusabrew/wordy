@@ -61,6 +61,9 @@ GameManager =
         if game.users.length >= game.minPlayers and not game.started
 
             game.start()
+
+            @queueWord game, getRandomDelay(3000, 5000)
+
             return callback true
 
         callback false
@@ -74,4 +77,23 @@ GameManager =
         game.finish()
         callback true
 
+    queueWord: (game, delay) ->
+        setTimeout =>
+            numWords = 1 + Math.floor(Math.random()*3)
+            words = game.spawnWords numWords
+            @emitGame game, "game:word:spawn", words if words.length
+
+            if game.isGridFull()
+                # @todo make this something a bit better, obviously
+                @emitGame game, "game:notification", "The grid is full!"
+            else
+                @queueWord game, getRandomDelay()
+        , delay
+
+    emitGame: (game, msg, data) ->
+        @io.sockets.in("game:#{game.id}").emit msg, data
+
 module.exports = GameManager
+
+# @todo move to utils or something as getRandom(min, max)
+getRandomDelay = (min = 250, max = 7000) -> min + Math.ceil(Math.random()*(max-min))

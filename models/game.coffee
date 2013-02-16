@@ -51,34 +51,16 @@ class Game
 
         return object
 
-    emitRoom: (msg, data) ->
-        require("../managers/game").io.sockets.in("game:#{@id}").emit msg, data
 
     start: ->
         @started = new Date
-        @queueWord getRandomDelay(3000, 5000)
 
     finish: ->
         @finished = new Date
 
-    queueWord: (delay) ->
-
-        setTimeout =>
-            @spawnWord()
-
-            # still not keen on the game handling this logic but can't see
-            # how to squeeze it into a controller which doesn't exist
-            if @slotsTaken is @width*@height
-                # @todo make this something a bit better, obviously
-                @emitRoom "game:notification", "The grid is full!"
-            else
-                @queueWord getRandomDelay()
-        , delay
-
-    spawnWord: ->
+    spawnWords: (numWords) ->
 
         data = []
-        numWords = 1 + Math.floor(Math.random()*3)
 
         for x in [1..numWords]
             word = @getRandomWordAndPosition()
@@ -96,14 +78,7 @@ class Game
 
                 data.push word
 
-        return if data.length is 0
-
-        # we want a controller to pick this up, but the trouble
-        # is controllers don't exist until new'd() by a socket
-        # this is the only current example of anything other than
-        # a controller emitting socket messages: quite tempted to
-        # push the queue requests to the client(s)
-        @emitRoom "game:word:spawn", data
+        return data
 
     findWord: (text) ->
         for word, i in @words when word.claimed is false
@@ -266,7 +241,7 @@ class Game
         user.gameScore = 0
         @users.push user
 
-module.exports = Game
+    isGridFull: ->
+        @slotsTaken is @width*@height
 
-# @todo move to utils or something as getRandom(min, max)
-getRandomDelay = (min = 250, max = 7000) -> min + Math.ceil(Math.random()*(max-min))
+module.exports = Game
