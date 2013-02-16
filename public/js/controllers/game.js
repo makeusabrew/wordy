@@ -184,6 +184,25 @@ function GameController($rootScope, $scope, $routeParams, $location, client, d3)
         $location.path("/lobby");
     });
 
+    client.on("game:countdown", function(value) {
+        var block = svg.append("g")
+        .attr("transform", "translate("+width/2+", "+height/2+")");
+
+        block
+        .append("text")
+        .attr("class", "word--countdown")
+        .attr("opacity", 0)
+        .attr("text-anchor", "middle")
+        .attr("dy", "60px")
+        .text(value)
+        .transition(100)
+        .attr("opacity", 1)
+        .transition(100)
+        .delay(800)
+        .attr("transform", "scale(0)")
+        .remove();
+    });
+
     function getObjectById(id, property) {
         var i = $scope[property].length;
         while (i--) {

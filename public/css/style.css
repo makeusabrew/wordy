@@ -18,6 +18,10 @@ body {
     font-size:13px;
 }
 
+.word--countdown {
+    font-size:300px;
+}
+
 .text-input--full {
     width:100%;
 }

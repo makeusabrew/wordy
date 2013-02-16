@@ -62,7 +62,7 @@ GameManager =
 
             game.start()
 
-            @queueWord game, getRandomDelay(3000, 5000)
+            @startCountdown game
 
             return callback true
 
@@ -92,6 +92,26 @@ GameManager =
 
     emitGame: (game, msg, data) ->
         @io.sockets.in("game:#{game.id}").emit msg, data
+
+    startCountdown: (game) ->
+        # @see https://github.com/makeusabrew/wordy/issues/13
+        # crude as you like, but okay for now
+        setTimeout =>
+            @emitGame game, "game:countdown", "3"
+        , 1000
+
+        setTimeout =>
+            @emitGame game, "game:countdown", "2"
+        , 2000
+
+        setTimeout =>
+            @emitGame game, "game:countdown", "1"
+        , 3000
+
+        setTimeout =>
+            @emitGame game, "game:countdown", "Go!"
+            @queueWord game, getRandomDelay(3000, 5000)
+        , 4000
 
 module.exports = GameManager
 
