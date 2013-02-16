@@ -1,9 +1,0 @@
-Always been unsure how to do transitions. Using angular seems to make that easier.
-
-1. Client side has more control. It can dictate where it wants to go without
-incessent <-> with server. When it does, it usually does so via a $location.path(foo)
-call, which in turn loads a template and controller(s). So far this is all client
-side, which is beneficial as it means we *know* the client has loaded the relevant
-DOM / controller before sending any messages to it. On init (e.g. in the controller's
-constructor) the controller emits a message to the server letting it know it's
-ready to receive data.
