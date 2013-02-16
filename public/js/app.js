@@ -1,5 +1,5 @@
 angular
-.module("wordy", ["client", "d3"])
+.module("wordy", ["client", "d3", "soundManager"])
 .config(function($routeProvider, $locationProvider) {
 
     $locationProvider.html5Mode(true);
@@ -25,7 +25,7 @@ angular
     });
 
 })
-.run(function($rootScope, $location, client) {
+.run(function($rootScope, $location, client, soundManager) {
 
     // want to share the authed user state
     $rootScope.user = {};
@@ -50,4 +50,7 @@ angular
         // we have to make sure we scrap any client.on("foo") listeners
         client.removeListeners();
     });
+
+    soundManager.init();
+    soundManager.load("/sounds/test.wav", "test");
 });
