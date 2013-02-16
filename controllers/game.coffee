@@ -43,7 +43,7 @@ class GameController extends BaseController
             GameManager.allSlotsClaimed @socket.game, (claimed) =>
                 return if not claimed
 
-                GameManager.finishGame @socket.game, =>
-                    @socket.emitRoom "game:#{@socket.game.id}", "game:over"
+                GameManager.finishGame @socket.game, (result) =>
+                    @socket.emitRoom "game:#{@socket.game.id}", "game:results", @socket.game.toObject() if result
 
 module.exports = GameController

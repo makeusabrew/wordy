@@ -32,6 +32,7 @@ class Game
         @lastWordUserId = 0
         @wordCombo = 1
         @users = []
+        @winner = null
 
         # this is a crude implementation of shuffle()... but seems to work well enough
         @wordOrder.sort -> if Math.random() >= 0.5 then -1 else 1
@@ -48,6 +49,7 @@ class Game
 
         # transient, non persisted stuff
         object.users = (user.toObject() for user in @users)
+        object.winner = @winner
 
         return object
 
@@ -57,6 +59,13 @@ class Game
 
     finish: ->
         @finished = new Date
+
+        @users.sort (a, b) ->
+            return  1 if a.gameScore < b.gameScore
+            return -1 if a.gameScore > b.gameScore
+            return  0
+
+        @winner = @users[0]
 
     spawnWords: (numWords) ->
 
@@ -106,11 +115,14 @@ class Game
 
         score *= @wordCombo
 
+        user.gameScore += score
+
         # @todo can we just augment the word here?
         # that way we can easily store relevant stuff
         # in one place
         result =
             points: score
+            currentScore: user.gameScore
             combo: @wordCombo
             wordId: word.id
             userId: user.id

@@ -14,10 +14,17 @@ function GameController($rootScope, $scope, $routeParams, $location, client, d3)
         $scope.word = "";
     };
 
+    // @todo you shouldn't really be able to quit
+    // and if you can, the server needs to be notified properly
     $scope.quit = function() {
         if (confirm("Are you sure?")) {
             $location.path("/lobby");
         }
+    };
+
+    $scope.leave = function() {
+        // @todo server stuff
+        $location.path("/lobby");
     };
 
     /**
@@ -160,7 +167,7 @@ function GameController($rootScope, $scope, $routeParams, $location, client, d3)
             .attr("opacity", 0.7);
         }
 
-        player.score += data.points;
+        player.score = data.currentScore;
 
         var msg = {
             user: player,
@@ -177,11 +184,9 @@ function GameController($rootScope, $scope, $routeParams, $location, client, d3)
         console.log(data);
     });
 
-    client.on("game:over", function() {
-        // ???
-        alert("Game over!");
-
-        $location.path("/lobby");
+    client.on("game:results", function(game) {
+        // for now just update the game object
+        $scope.game = game;
     });
 
     client.on("game:countdown", function(value) {

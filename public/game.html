@@ -1,8 +1,11 @@
 <div ng-show="game" class=gw>
-    <div class="g   three-fifths">
+    <h1>
         Game #{{game.id}}
         Players: {{players.length}}/{{game.maxPlayers}}
-        Tiles remaining: {{slots.available}}/{{slots.total}}
+        <span ng-hide="game.finished">Tiles remaining: {{slots.available}}/{{slots.total}}</span>
+        <span ng-show="game.finished">&ndash; Game over!</span>
+    </h1>
+    <div class="g   three-fifths">
         <a href="" ng-click="quit()">Quit to lobby</a>
 
         <div class="game-svg"></div>
@@ -14,15 +17,22 @@
     </div>
 
     <div class="g   two-fifths">
-        <h2>Players</h2>
-        <ol>
-            <li ng-repeat="player in players | orderBy:player.score:true">
-                <img ng-src="{{getAvatar(player)}}" width="32" height="32" />
-                {{player.username}} &ndash; {{player.score}}
-            </li>
-        </ol>
+        <div ng-hide="game.finished">
+            <h2 class="gamma">Players</h2>
+            <ol>
+                <li ng-repeat="player in players | orderBy:player.score:true">
+                    <img ng-src="{{getAvatar(player)}}" width="32" height="32" />
+                    {{player.username}} &ndash; {{player.score}}
+                </li>
+            </ol>
+        </div>
+        <div ng-show="game.finished">
+            <h2 class="gamma">Results</h2>
+            <p><b>{{game.winner.username}}</b> wins!</p>
+            <p>You may now <a href="" ng-click="leave()">return to the lobby</a>.</p>
+        </div>
 
-        <h2>Notifications</h2>
+        <h2 class="gamma">Notifications</h2>
         <ul class="secret-list">
             <li ng-repeat="message in messages">
                 <img ng-src="{{getAvatar(message.user)}}" width="20" height="20" />
