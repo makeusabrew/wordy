@@ -14,15 +14,12 @@ function GameController($rootScope, $scope, $routeParams, $location, client, d3,
         $scope.word = "";
     };
 
-    // @todo you shouldn't really be able to quit
-    $scope.quit = function() {
-        if (confirm("Are you sure?")) {
-            $scope.leave();
-        }
-    };
-
     $scope.leave = function() {
         client.emit("game:leave");
+    };
+
+    $scope.playerScore = function(p) {
+        return p.score;
     };
 
     /**
@@ -34,7 +31,7 @@ function GameController($rootScope, $scope, $routeParams, $location, client, d3,
         height = 500;
 
     var svg = d3
-    .select(".game-svg")
+    .select(".game")
     .append("svg")
     .attr("width", width+1)
     .attr("height", height+1);
