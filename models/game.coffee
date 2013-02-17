@@ -49,7 +49,7 @@ class Game
 
         # transient, non persisted stuff
         object.users = (user.toObject() for user in @users)
-        object.winner = @winner
+        object.winner = @winner.toObject() if winner
 
         return object
 

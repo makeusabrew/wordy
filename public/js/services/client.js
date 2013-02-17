@@ -2,7 +2,6 @@ angular.module("client", [])
 .factory("client", function($window, $rootScope) {
 
     var socket = null,
-        user   = {},
         that   = {};
 
     that.connect = function(callback) {

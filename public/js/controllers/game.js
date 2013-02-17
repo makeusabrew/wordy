@@ -1,4 +1,4 @@
-function GameController($rootScope, $scope, $routeParams, $location, client, d3) {
+function GameController($rootScope, $scope, $routeParams, $location, client, d3, soundManager) {
 
     $rootScope.pageTitle = "Game #"+$routeParams.id;
 
@@ -65,6 +65,9 @@ function GameController($rootScope, $scope, $routeParams, $location, client, d3)
      * handlers
      */
     client.on("game:word:spawn", function(data) {
+
+        soundManager.play("spawn");
+
         data.forEach(function(word) {
 
             $scope.slots.available -= word.size;
@@ -124,6 +127,11 @@ function GameController($rootScope, $scope, $routeParams, $location, client, d3)
     });
 
     client.on("game:word:claim", function(data) {
+
+        if (data.userId === $rootScope.user.id) {
+            soundManager.play("claim");
+        }
+
         var block = svg.select("g[data-id='"+data.wordId+"']");
 
         var player = getPlayer(data.userId);

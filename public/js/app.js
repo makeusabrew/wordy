@@ -52,5 +52,6 @@ angular
     });
 
     soundManager.init();
-    soundManager.load("/sounds/test.wav", "test");
+    soundManager.load("/sounds/claim.wav", "claim");
+    soundManager.load("/sounds/spawn.wav", "spawn");
 });
