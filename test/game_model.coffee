@@ -58,6 +58,31 @@ describe "Game model", ->
             assert.equal 10, game.width
             assert.equal 10, game.height
 
+    describe "#unclaimedTileCount", ->
+        before ->
+            game = new Game object
+
+        describe "with a new object", ->
+
+            it "should return zero", ->
+                assert.equal 0, game.unclaimedTileCount()
+
+        describe "after spawning a word spanning one tile", ->
+            before ->
+                slot = game.gridList[0]
+                game.spawnWordAtSlot "foo", slot
+
+            it "should return one", ->
+                assert.equal 1, game.unclaimedTileCount()
+
+        describe "after spawning another word spanning two tiles", ->
+            before ->
+                slot = game.gridList[1]
+                game.spawnWordAtSlot "foobar", slot
+
+            it "should return three", ->
+                assert.equal 3, game.unclaimedTileCount()
+
     ###
     describe "#start", ->
         before ->

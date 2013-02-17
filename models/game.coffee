@@ -72,20 +72,9 @@ class Game
         data = []
 
         for x in [1..numWords]
-            word = @getRandomWordAndPosition()
-            if word
+            break if @slotsTaken is @width*@height
 
-                word.claimed = false
-                word.userId = null
-                word.id = @wordId
-
-                @wordId += 1
-                @words.push word
-
-                @dirtyGrid word
-                @calculateGridAvailibility()
-
-                data.push word
+            data.push @getRandomWordAndPosition()
 
         return data
 
@@ -166,17 +155,12 @@ class Game
         return vector
 
     getRandomWordAndPosition: ->
-        # right, what's our ideal next grid slot?
-        return null if @slotsTaken is @width*@height
 
-        while @wordIndex < @wordOrder.length
-            slot = @gridList[@wordOrder[@wordIndex]]
-            break if slot.free
-
-            @wordIndex += 1
+        slot = @getNextFreeSlot()
 
         # figure out the max possible word length from here
         # regardless of direction
+        # @todo store this against the slot instead
         max = 0
         max = size if size > max for size in slot.sizes
 
@@ -184,13 +168,15 @@ class Game
         # get a word UP TO max length
         text = WordList.getWordUpToLength(max * 5)
 
-        # we need to then convert the word length back down to grid size
+        @spawnWordAtSlot text, slot
+
+    spawnWordAtSlot: (text, slot) ->
+
+        # we need to convert the word length back down to grid size
         size = Math.ceil(text.length / 5)
 
         # pick any direction which can house the word
         dir = @getSlotDirection slot, size
-
-        @wordIndex += 1
 
         word =
             x: slot.x
@@ -198,6 +184,18 @@ class Game
             text: text
             size: size
             rotation: dir
+            claimed: false
+            userId: null
+            id: @wordId
+
+        @wordId += 1
+
+        @words.push word
+
+        @dirtyGrid word
+
+        @calculateGridAvailibility()
+
 
         return word
 
@@ -258,5 +256,15 @@ class Game
 
     isGridFull: ->
         @slotsTaken is @width*@height
+
+    unclaimedTileCount: ->
+        @slotsTaken - @slotsClaimed
+
+    getNextFreeSlot: ->
+        while @wordIndex < @wordOrder.length
+            slot = @gridList[@wordOrder[@wordIndex]]
+            @wordIndex += 1
+
+            return slot if slot.free
 
 module.exports = Game
