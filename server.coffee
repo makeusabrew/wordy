@@ -17,6 +17,9 @@ app.configure ->
 app.configure "build", ->
     Config.load __dirname + "/config/build.json"
 
+app.configure "test", ->
+    Config.load __dirname + "/config/test.json"
+
 # start web server
 server = app.listen Config.get("server", "port")
 

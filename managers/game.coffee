@@ -85,6 +85,8 @@ GameManager =
 
     queueWord: (game, delay) ->
         setTimeout =>
+            # https://github.com/makeusabrew/wordy/issues/16 - needs implementing
+            # here-ish is probably the right place for it
             numWords = 1 + Math.floor(Math.random()*3)
             words = game.spawnWords numWords
             @emitGame game, "game:word:spawn", words if words.length

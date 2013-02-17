@@ -43,7 +43,6 @@ angular
     client.connect(function() {
         $rootScope.connected = true;
         $location.path("/login");
-
     });
 
     $rootScope.$on("$routeChangeStart", function(next, current) {

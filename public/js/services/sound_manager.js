@@ -6,10 +6,17 @@ angular.module("soundManager", [])
         that   = {};
 
     that.init = function() {
+        if (typeof webkitAudioContext === 'undefined') {
+            return;
+        }
+
         context = new webkitAudioContext();
     };
 
     that.load = function(url, name, callback) {
+        if (!context) {
+            return;
+        }
         // sadly we can't use $http here as AngularJS 1.0.x
         // doesn't support the responseType property
 
@@ -35,6 +42,10 @@ angular.module("soundManager", [])
     };
 
     that.play = function(name) {
+        if (!context) {
+            return;
+        }
+
         var source = context.createBufferSource();
         source.buffer = sounds[name];
         source.connect(context.destination);
