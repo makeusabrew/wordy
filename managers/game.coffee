@@ -27,6 +27,12 @@ GameManager =
 
         callback()
 
+    removeUserFromGame: (user, game, callback) ->
+
+        game.removeUser user
+
+        callback()
+
     findUsers: (id, callback) ->
         callback game[id].users
 

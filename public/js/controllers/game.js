@@ -15,16 +15,14 @@ function GameController($rootScope, $scope, $routeParams, $location, client, d3)
     };
 
     // @todo you shouldn't really be able to quit
-    // and if you can, the server needs to be notified properly
     $scope.quit = function() {
         if (confirm("Are you sure?")) {
-            $location.path("/lobby");
+            $scope.leave();
         }
     };
 
     $scope.leave = function() {
-        // @todo server stuff
-        $location.path("/lobby");
+        client.emit("game:leave");
     };
 
     /**
@@ -206,6 +204,10 @@ function GameController($rootScope, $scope, $routeParams, $location, client, d3)
         .delay(800)
         .attr("transform", "scale(0)")
         .remove();
+    });
+
+    client.on("game:leave", function() {
+        $location.path("/lobby");
     });
 
     function getObjectById(id, property) {

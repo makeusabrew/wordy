@@ -10,3 +10,8 @@ module.exports =
             return unless socket.game
             
             controller.submitWord data
+
+        socket.on "game:leave", (data) ->
+            return unless socket.game
+
+            controller.leave data

@@ -253,6 +253,9 @@ class Game
         user.gameScore = 0
         @users.push user
 
+    removeUser: (user) ->
+        return @users.splice i, 1 for u, i in @users when u.id is user.id
+
     isGridFull: ->
         @slotsTaken is @width*@height
 

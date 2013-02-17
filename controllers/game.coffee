@@ -46,4 +46,16 @@ class GameController extends BaseController
                 GameManager.finishGame @socket.game, (result) =>
                     @socket.emitRoom "game:#{@socket.game.id}", "game:results", @socket.game.toObject() if result
 
+    leave: ->
+        GameManager.removeUserFromGame @socket.user, @socket.game, =>
+
+            room ="game:#{@socket.game.id}"
+
+            @socket.game = null
+
+            @socket.leave room
+            @socket.emitRoom room, "game:user:leave", @socket.user.toObject()
+
+            @socket.emit "game:leave"
+
 module.exports = GameController
