@@ -67,7 +67,7 @@ describe "Game model", ->
             it "should return zero", ->
                 assert.equal 0, game.unclaimedTileCount()
 
-        describe "after spawning a word spanning one tile", ->
+        describe "when spawning a word spanning one tile", ->
             before ->
                 slot = game.gridList[0]
                 game.spawnWordAtSlot "foo", slot
@@ -75,13 +75,22 @@ describe "Game model", ->
             it "should return one", ->
                 assert.equal 1, game.unclaimedTileCount()
 
-        describe "after spawning another word spanning two tiles", ->
+        describe "when spawning another word spanning two tiles", ->
             before ->
                 slot = game.gridList[1]
                 game.spawnWordAtSlot "foobar", slot
 
             it "should return three", ->
                 assert.equal 3, game.unclaimedTileCount()
+
+        describe "when claiming the first word", ->
+            before ->
+                user =
+                    id: 123
+                game.claimWord user, "foo"
+
+            it "should return two", ->
+                assert.equal 2, game.unclaimedTileCount()
 
     ###
     describe "#start", ->
