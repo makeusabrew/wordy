@@ -4,6 +4,9 @@ Game        = require "../models/game"
 
 games = {}
 
+# @todo move this config stuff elsewhere
+MAX_UNCLAIMED_TILES = 10
+
 GameManager =
     io: null
 
@@ -61,6 +64,12 @@ GameManager =
         callback games[id]
 
     claimWord: (game, user, text, callback) ->
+        # @todo we need to check whether we'd previously been at MAX_UNCLAIMED_TILES
+        # and if so re-instate queueWord with a delay value where max is
+        # something like max - (new Date - game.lastSpawnTime) - basically
+        # just need to make sure that players aren't kept waiting for ages
+        # ALSO: need to make sure there's no race condition between checking
+        # and claiming - having a timer on queueWord could help here...
         callback game.claimWord user, text
 
     canStartGame: (game, callback) ->
@@ -93,9 +102,11 @@ GameManager =
 
             if game.isGridFull()
                 # @todo make this something a bit better, obviously
-                @emitGame game, "game:notification", "The grid is full!"
-            else
-                @queueWord game, getRandomDelay()
+                return @emitGame game, "game:notification", "The grid is full!"
+
+            # only queue more words if there aren't too many already
+            if game.unclaimedTileCount() < MAX_UNCLAIMED_TILES
+                return @queueWord game, getRandomDelay()
         , delay
 
     emitGame: (game, msg, data) ->

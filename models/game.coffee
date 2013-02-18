@@ -15,6 +15,7 @@ class Game
         @wordIndex = 0
         @slotsTaken = 0
         @slotsClaimed = 0
+        @lastSpawnTime = 0
 
         for x in [0..@width-1]
             @grid[x] = {}
@@ -85,7 +86,7 @@ class Game
         return null
     
     claimWord: (user, text) ->
-        word = @findWord text, (word) ->
+        word = @findWord text
 
         return null if not word
 
@@ -196,6 +197,7 @@ class Game
 
         @calculateGridAvailibility()
 
+        @lastSpawnTime = new Date
 
         return word
 
