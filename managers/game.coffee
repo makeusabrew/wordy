@@ -2,16 +2,19 @@ GameMapper  = require "../mappers/game"
 UserManager = require "./user"
 Game        = require "../models/game"
 
+timers = {}
 games = {}
 
 # @todo move this config stuff elsewhere
 MAX_UNCLAIMED_TILES = 10
+MAX_TIME_GAP = 7000
 
 GameManager =
     io: null
 
     addActive: (game, callback) ->
         games[game.id] = game
+        timers[game.id] = null
         callback()
 
     countAllActive: (callback) ->
@@ -64,13 +67,16 @@ GameManager =
         callback games[id]
 
     claimWord: (game, user, text, callback) ->
-        # @todo we need to check whether we'd previously been at MAX_UNCLAIMED_TILES
-        # and if so re-instate queueWord with a delay value where max is
-        # something like max - (new Date - game.lastSpawnTime) - basically
-        # just need to make sure that players aren't kept waiting for ages
-        # ALSO: need to make sure there's no race condition between checking
-        # and claiming - having a timer on queueWord could help here...
-        callback game.claimWord user, text
+        result = game.claimWord user, text
+
+        # word looks good, no timer present and space on the grid - queue one!
+        if result and not timers[game.id] and game.unclaimedTileCount() < MAX_UNCLAIMED_TILES
+            timeGap = (new Date) - game.lastSpawnTime
+            timeLeft = Math.max(1000, MAX_TIME_GAP - timeGap)
+
+            @queueWord game, getRandomDelay(250, timeLeft)
+
+        callback result
 
     canStartGame: (game, callback) ->
         if game.users.length >= game.minPlayers and not game.started
@@ -93,9 +99,12 @@ GameManager =
         callback true
 
     queueWord: (game, delay) ->
-        setTimeout =>
-            # https://github.com/makeusabrew/wordy/issues/16 - needs implementing
-            # here-ish is probably the right place for it
+        return if timers[game.id]
+
+        timers[game.id] = setTimeout =>
+            timers[game.id] = null
+            timer = null
+
             numWords = 1 + Math.floor(Math.random()*3)
             words = game.spawnWords numWords
             @emitGame game, "game:word:spawn", words if words.length
